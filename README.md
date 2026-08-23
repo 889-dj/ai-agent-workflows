@@ -24,6 +24,15 @@ git clone https://github.com/889-dj/ai-agent-workflows.git
 Consult your agent's documentation for its current skill-discovery location and
 installation method.
 
+
+## Credits
+
+The app-idea-hunter skill's harvest methodology (Phase 1) draws on the idea-sourcing approaches from:
+
+- Steven Cravotta — "How I Find App Ideas That Print"
+- Simon Grimm — short on app-idea market analysis
+- Builders Central — "This is How I Find App Ideas That Print"
+
 ## License
 
 MIT
