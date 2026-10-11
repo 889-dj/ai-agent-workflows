@@ -8,6 +8,7 @@ maintained by me for ChatGPT, Codex, Claude, and other AI agents.
 | Skill | Purpose |
 | --- | --- |
 | [`app-idea-hunter`](skills/app-idea-hunter/) | Researches, validates, and scores app ideas using evidence from revenue, demand, distribution, and real user pain. |
+| [`mobile-ui-pipeline-v2`](skills/mobile-ui-pipeline-v2/) | Designs and builds working Expo / React Native screens in one pass: short intake, parallel research fan-out, design direction, functional build, and self-review. Uses paid sources (e.g. Mobbin) when available, never requires them. |
 
 Each skill follows the standard directory format: a required `SKILL.md` entry
 point with optional `references/`, `scripts/`, and `assets/` resources beside it.
