@@ -112,6 +112,11 @@ judged against the incumbents and keywords that wedge would actually compete wit
 and feasibility against the wedge's real build, not a full-featured category leader.
 Record it as `"wedge"` in `scores.json` (a short sentence).
 
+## Status of the weights
+
+The weights are provisional judgement. Log predictions with `scripts/backtest.py`
+and resolve outcomes over time (`calibration.md`) before relying on them.
+
 ## Reading the total
 
 - **80+** — build it. Go to Phase 7 and validate this week.

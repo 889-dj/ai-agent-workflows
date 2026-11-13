@@ -1,0 +1,46 @@
+{
+  "cases": [
+    {
+      "name": "Subscription tracker + cancel app",
+      "as_of": "2026-11-13",
+      "wedge": "Track and cancel subscriptions",
+      "pmf_tier": "T2",
+      "scores": {
+        "pain": 12,
+        "money": 10,
+        "demand": 5,
+        "marketability": 16,
+        "feasibility": 6
+      },
+      "confidence": null,
+      "total": 49,
+      "predicted_band": "KILL",
+      "outcome": {
+        "result": "pending",
+        "evidence": "",
+        "resolved_on": ""
+      }
+    },
+    {
+      "name": "Running-only app (clean, no-upsell)",
+      "as_of": "2026-11-13",
+      "wedge": "Clean run tracker for people who pay for Strava and resent the upsells",
+      "pmf_tier": "T3",
+      "scores": {
+        "pain": 25,
+        "money": 10,
+        "demand": 7,
+        "marketability": 18,
+        "feasibility": 6
+      },
+      "confidence": null,
+      "total": 66,
+      "predicted_band": "STRONG",
+      "outcome": {
+        "result": "pending",
+        "evidence": "",
+        "resolved_on": ""
+      }
+    }
+  ]
+}

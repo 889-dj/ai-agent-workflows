@@ -311,6 +311,12 @@ Score the wedge from Phase 5.5, not the category. Produce `hunt/REPORT.md` using
 Lead with the kill list summary, not the winners. The user needs to trust the
 filter before they'll trust what came through it.
 
+After the report, log the scored candidates for later calibration:
+`python3 scripts/backtest.py add hunt/scores.json log/predictions.json`. When a
+real outcome is known (3–12 months on), resolve the case and run
+`backtest.py report`. See `references/calibration.md`. Until enough cases are
+resolved, call the weights provisional.
+
 ## Phase 7 — Cheap validation (draft only, ship on approval)
 
 For the top pick, prepare — do not publish:
@@ -357,6 +363,8 @@ are the user's to do or explicitly authorize.
 - `references/reddit-pmf.md` — the Phase 5 protocol in full.
 - `references/scouts/` — portable task briefs for delegated research workers.
 - `assets/dossier-template.md` — the report format.
+- `scripts/backtest.py` — prediction log and backtest of the scoring weights;
+  `references/calibration.md` explains how to use it honestly.
 - `scripts/trend_check.py` — classifies Trends curves and flags shared artifacts.
 - `scripts/review_themes.py` — counts recurring complaints in low-star reviews.
 - `scripts/pain_table.py` — evidence table and suggested T0–T3 grade.
