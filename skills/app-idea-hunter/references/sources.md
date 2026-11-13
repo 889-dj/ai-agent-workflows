@@ -196,7 +196,10 @@ over, wait.**
 
 ## Coverage checklist
 
-Tick before writing the report. Mark each: covered / unavailable (reason).
+Tick before writing the report.
+
+Mark each: covered / unavailable (reason) / not applicable (reason). Say which
+access layer from `access.md` produced the data.
 
 **Harvest** — Acquire high-to-low · Acquire under-$10k · Flippa · TrustMRR ·
 Product Hunt · top-grossing charts · incumbent 1-star reviews · X support
@@ -210,6 +213,9 @@ difficulty <50)
 **Marketability** — Viral Ad Library (organic vs paid) · TikTok most-liked ·
 controversy read · first-video sentence
 
-**PMF** — Reddit gate, graded T0–T3, evidence bar checked
+**Screen** — feasibility and hazard sketch · Reddit smoke test
+
+**PMF** — Reddit gate (or fallback sources), graded T0–T3, evidence bar checked,
+links spot-checked
 
 **Feasibility** — one-problem-one-feature test · build budget · blockers

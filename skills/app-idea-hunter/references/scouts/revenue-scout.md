@@ -30,6 +30,9 @@ good sign and you should report it plainly rather than hedging.
 
 ## Rules
 
+- Reach sources in this order: the Apify actor named in your brief, then Agent
+  Reach, then manual browsing, and say which you used.
+
 - Never invent or interpolate a revenue number. `unknown` is a valid, useful
   answer and a fabricated figure poisons the whole downstream score.
 - Distinguish "no incumbents found" from "could not access the data". These lead

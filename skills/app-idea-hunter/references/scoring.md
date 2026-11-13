@@ -10,8 +10,12 @@ A candidate failing any of these is dead regardless of its score. Report it in
 the kill list with the gate named.
 
 1. **Reddit PMF is T0 or T1.** No real, current, unprompted pain → dead.
-2. **No money in the niche.** No incumbent with evidence of revenue → dead.
-   Silence is a graveyard, not an opening.
+2. **No money in the niche.** You looked properly and no incumbent shows revenue
+   → dead. Silence is a graveyard, not an opening. Two exceptions, both in the
+   script: data you *could not reach* is `unknown`, never `none`, and does not
+   kill (it lowers confidence instead); and a **T3** candidate is not killed by
+   this gate, because T3 means people are already paying or hacking around the
+   problem — flag it and verify the payers before building.
 3. **Trend flat or declining** across both target geo and worldwide → dead.
 4. **Build exceeds the budget by more than ~50%** and cannot be cut down → dead.
 5. **Store-policy or safety hazard** — health claims, anything involving minors,
@@ -42,8 +46,10 @@ Is anyone already paid here, per Phase 2.
 - 10 — incumbents exist, monetization visible, no revenue data
 - 0 — nothing (kill gate)
 
-Subtract 5 if the category is one giant and nothing else — that is a harder market
-for a solo builder than a spread of mid-size independents.
+If the category is one giant and nothing else, set `"giant_category": true`. The
+script subtracts 5 from this axis for you — do not subtract it by hand. A single
+giant is a harder market for a solo builder than a spread of mid-size
+independents.
 
 ### Demand — 20 points
 Trend direction and keyword opportunity, per Phase 3.
@@ -87,9 +93,28 @@ Rank T3-pain candidates above T2 candidates when totals are within about five
 points. Observed demand beats inferred demand, and the total is not precise enough
 to justify overriding that.
 
+## Consistency checks the script enforces
+
+The structured fields and the hand-entered axis scores must agree, so a score
+cannot quietly contradict its own evidence.
+
+- **Pain ceiling by tier:** T2 ≤ 18, T3 ≤ 25, T0/T1 = 0.
+- **Demand ceiling by trend:** rising_both 20 · rising_one 16 · spiky/seasonal 13 ·
+  flat/declining 8 · unknown 20.
+- **Marketability** ≤ 10 when `first_video` is false.
+- Axis values must be numbers or `null`, within each axis maximum.
+- Duplicate candidate names, unknown enum values and non-boolean `hazard` are errors.
+
 ## Input file
 
-`hunt/scores.json`:
+`hunt/scores.json`. Allowed values:
+
+- `pmf_tier` — `T0` `T1` `T2` `T3` (leave out until Phase 5 has graded it)
+- `money_evidence` — `verified` · `estimated` · `listed` · `unknown` · `none`
+  (`unknown` = data unreachable, `none` = looked properly and found nothing)
+- `trend` — `rising_both` · `rising_one` · `spiky` · `seasonal` · `flat` ·
+  `declining` · `unknown`
+- `hazard`, `giant_category`, `first_video` — true/false
 
 ```json
 {
@@ -102,6 +127,8 @@ to justify overriding that.
       "build_days": 10,
       "budget_days": 14,
       "hazard": false,
+      "giant_category": false,
+      "first_video": true,
       "scores": {
         "pain": 25,
         "money": 25,
@@ -114,3 +141,5 @@ to justify overriding that.
   ]
 }
 ```
+
+Run the tests with `python3 scripts/test_score.py`.

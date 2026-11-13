@@ -40,6 +40,28 @@ Then find the two to four subreddits where this population actually gathers and
 search inside them directly. Sort by top of the past year for depth, and check
 the past month separately for whether it is still live.
 
+## How to collect the threads
+
+Use the access layers in `access.md`: the Apify Reddit actor first (it returns
+dated, linked rows and, on some actors, flags for pain, willingness to pay and
+feature requests — treat those flags as a way to sort, never as the grade), Agent
+Reach second, manual `site:reddit.com` search last. Pull a few dozen posts per
+query batch, with comments where people answer "what do you use?".
+
+A run that errored, was blocked, or returned zero rows with a failed status is
+**not** a T0. It is `unavailable`; say so and switch layer. Only a successful run
+with queries you can list counts as silence.
+
+## When the audience is not on Reddit
+
+Some buyers never post there (older consumers, many B2B roles, some regions).
+Then add the places they do talk: niche forums, App Store and Play Store reviews of
+incumbents, YouTube comments, X threads, Discord or Facebook groups where
+reachable. The same bar applies per source type, the report names which sources
+were used, and a pass from outside Reddit is graded the same way. Silence on
+Reddit alone is not a T0 for an audience that is not there; it is `not
+applicable` plus a note.
+
 ## What counts
 
 A thread counts when a person describes the problem as **their own**.
@@ -58,6 +80,11 @@ All four, or the candidate does not pass:
 - across at least **2** distinct subreddits
 - at least **1** from the past **6 months**
 - at least **1** person **explicitly asking what tool to use**
+
+The numbers are a floor for a mid-size niche, not a law: for a very small
+niche, say so and justify a lower thread count in the report rather than quietly
+passing. For a huge niche, five threads is easy and proves little, so look at
+recurrence and upvotes too.
 
 Two subreddits matters because a single community can have a local obsession that
 does not generalize. Recency matters because a problem solved in 2022 by a good
@@ -85,6 +112,13 @@ inferred.
 
 Grade honestly in both directions. A generous grade costs the user weeks of
 building; an ungenerous one costs one more round of searching.
+
+## Verifying before you trust
+
+The orchestrator opens at least two of the returned thread links at random per
+candidate and confirms each exists, is dated as stated, and says what the row
+claims. Cross-posts of one thread count once. Returns without links, or with links
+that do not match their claims, are discarded and re-run.
 
 ## Handling what you find
 

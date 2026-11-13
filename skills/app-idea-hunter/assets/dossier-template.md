@@ -1,8 +1,9 @@
 # App Idea Hunt — <domain> — <date>
 
 **Scope:** <domain> · <build budget> days · <platform> · <monetization>
-**Sources covered:** <n>/<total> — unavailable: <list, or "none">
-**Funnel:** <n> harvested → <n> passed money → <n> passed demand →
+**Sources covered:** <n>/<total> — unavailable: <list, or "none"> — not applicable: <list, or "none">
+**Tools used:** <per phase: Apify actor / Agent Reach / manual>
+**Funnel:** <n> harvested → <n> passed the cheap screen → <n> passed money → <n> passed demand →
 <n> passed marketability → <n> passed the Reddit gate
 
 ---

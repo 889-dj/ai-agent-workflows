@@ -12,15 +12,20 @@ prove the idea is marketable, then — last — go read what actual humans on Re
 say about the problem. Ideas that survive all of it get a build brief. Everything
 else gets killed on the record, with a reason.
 
-The funnel is deliberately ordered so the expensive judgement happens on a
-shrinking list: ~30 candidates in, 3 dossiers out.
+The funnel is ordered so the expensive work happens on a shrinking list: ~30
+candidates in, a cheap screen that kills the obvious losers early, then the
+deeper checks, 3 dossiers out. Cheap and decisive checks run first; the full
+Reddit gate still runs last because it is the one that can overrule everything.
 
 ## Three rules that are not optional
 
 **1. Parallelize research when the environment supports it.** Assign each
 research worker one focused source or candidate and give it the matching prompt
-from `references/scouts/`. Prefer a fast, economical model that can browse and
-extract evidence reliably. The coordinating agent defines the briefs, reviews
+from `references/scouts/` — paste the brief and any reference text it needs into
+the dispatch, since a worker may not be able to read files from the skill
+directory. Prefer a fast, economical model that can use tools and extract
+evidence reliably. Workers reach sources through the layers in
+`references/access.md` (Apify first, Agent Reach second, manual last). The coordinating agent defines the briefs, reviews
 structured returns, makes judgments, scores candidates, and records kills. If
 subagents are unavailable, run the phases inline at reduced breadth and state
 that limitation instead of implying parallel research occurred.
@@ -35,16 +40,23 @@ catch different failure modes — marketplaces catch "does this make money", tre
 catch "is it dying", virality catches "can I get distribution", Reddit catches
 "is the pain real". Skipping a category doesn't just lose data, it removes a
 whole class of kill. Tick off the coverage checklist in `references/sources.md`
-before writing the report, and state any source you couldn't reach and why.
+before writing the report, and state any source you couldn't reach and why. A
+source that does not fit the idea type (TikTok for a B2B tool, ASO for a web app)
+is marked `not applicable` with the reason, not forced and not silently dropped.
 
 ## Before research
 
-Confirm source access before burning time. Several sources in `references/sources.md`
-are login-walled or paid — Sensor Tower, Astro, Viral Ad Library, Acquire's
-filtered search. Ask the user which they have, and use the free proxies listed in
-`references/sources.md` for the rest. Never fabricate a revenue figure or a
-keyword difficulty score to fill a gap: write `unavailable` and let the scorer
-handle the missing axis.
+Confirm source access before burning time. Read `references/access.md`: check
+whether the Apify connector is available, whether Agent Reach is installed, and
+which paid sources the user has — Sensor Tower, Astro, Viral Ad Library,
+Acquire's filtered search. Use the free proxies in `references/sources.md` for the
+rest. Never fabricate a revenue figure or a keyword difficulty score to fill a
+gap: write `unavailable` and let the scorer handle the missing axis.
+
+There is no spending cap in this skill; each user's connector sets its own limits.
+Before a large fan-out, give a rough cost estimate and ask for a go-ahead. A tool
+failure is `unavailable`, never evidence of absence (see `references/access.md`).
+Never put an API token in any file or in chat.
 
 Ask the user before doing any of these, every time: creating accounts, signing up
 for a marketplace, publishing a landing page, posting to social, or DMing anyone.
@@ -61,7 +73,15 @@ one round, then proceed with defaults.
   stack suggests)
 - **Monetization** — subscription, one-time, ads, freemium (default: subscription)
 
+Also note whether the target users plausibly gather on Reddit; if not, the Phase 5
+fallback sources apply.
+
 Write these to `hunt/00-scope.md`. Every later phase filters against them.
+
+**Run folder.** `hunt/` below means this run's folder, `hunt/<YYYY-MM-DD>-<domain>/`,
+so a second run never overwrites the first. Keep a `manifest.md` listing each
+phase file, the tool layer and actors used, and sources marked unavailable, so a
+run can be resumed and audited.
 
 ## Phase 1 — Harvest (target ~30 candidates)
 
@@ -99,6 +119,23 @@ The harvest grounds, and what each is actually for:
 De-duplicate, merge near-identical candidates into one line, and write
 `hunt/01-candidates.md`.
 
+## Phase 1.5 — Cheap screen (minutes per candidate, kills early)
+
+Before spending on money, trend and virality research, run the two checks that are
+cheapest and most decisive. Write `hunt/01b-screen.md`.
+
+1. **Feasibility and hazard sketch.** Can it be one problem, one feature, inside
+   the budget? Any hazard (health claims, minors, harassment risk, a store policy
+   it will not clear)? A clear hazard or a build far beyond budget is killed here;
+   a scope that can be cut is cut here.
+2. **Reddit smoke test.** One batch of pain-language queries per candidate (see
+   `references/reddit-pmf.md`), a few dozen posts, no grading. If no one is
+   describing the problem anywhere, drop it now. If the audience clearly does not
+   gather on Reddit, use the fallback sources instead. This is a pre-filter, not
+   the gate: Phase 5 still does the full, graded work on survivors.
+
+Keep roughly 10–15 candidates for Phase 2.
+
 ## Phase 2 — Money check (does this niche already pay?)
 
 Use `references/scouts/revenue-scout.md`, one assignment per candidate, batched
@@ -109,8 +146,12 @@ to earn (Sensor Tower estimates, Flippa and Acquire asking prices and stated
 monthly revenue, TrustMRR entries), and how they monetize.
 
 Competition is the signal you want. Silence is a graveyard — an empty niche
-usually means nobody could get paid there. **Kill any candidate with no evidence
-of anyone earning money in the space.**
+usually means nobody could get paid there. **Kill any candidate where a proper
+search found no evidence of anyone earning money in the space.** Distinguish that
+from `unknown` (the data could not be reached): unknown does not kill, it lowers
+confidence. And a candidate showing people already paying for, or hand-rolling
+around, the problem (T3 in Phase 5) is not killed by this gate — flag it and
+verify who is paying.
 
 Write `hunt/02-money.md`.
 
@@ -121,10 +162,12 @@ Use `references/scouts/demand-scout.md` for each survivor.
 - **Google Trends** on the core keyword, 5-year, the user's target geo plus
   worldwide. Flat or declining → kill. Up and to the right → proceed. Record the
   shape of the curve, not just a number.
-- **App Store keyword research** (Astro, or the free proxies in
-  `references/sources.md`). The target zone is **popularity above 20 with
-  difficulty below 50** — real search volume that isn't yet contested. Report
-  three to five keywords with both numbers.
+- **Keyword research, by platform.** For mobile apps: App Store keywords (Astro,
+  or the free proxies in `references/sources.md`); the target zone is **popularity
+  above 20 with difficulty below 50** — real search volume that isn't yet
+  contested. Report three to five keywords with both numbers. For web or
+  micro-SaaS: search-engine keyword volume and difficulty instead (Keyword
+  Planner, or an SEO tool the user has); ASO does not apply.
 
 A candidate with rising trends but every keyword above difficulty 70 isn't dead,
 it's a distribution problem — flag it rather than killing it, because Phase 4 may
@@ -150,7 +193,10 @@ distribution *before* committing to build, not after.
   would get an app pulled from the store is a kill, not a feature.
 
 Then answer honestly: *what is the first video about this app?* If nobody can
-write that one sentence, marketability is low regardless of view counts.
+write that one sentence, marketability is low regardless of view counts. For
+B2B or non-visual products, replace TikTok with the channel where that buyer
+actually learns about tools (LinkedIn, communities, search) and apply the same
+test.
 
 Write `hunt/04-marketability.md`.
 
@@ -174,6 +220,9 @@ grade T0–T3:
 - **T3** — people already paying for something bad, or hand-rolling spreadsheets
   and shortcuts to cope → **pass, and prioritize**
 
+If the audience is unlikely to be on Reddit, use the fallback sources in
+`references/reddit-pmf.md` and treat a T2 as weaker than it looks.
+
 Paraphrase what people said. Quote sparingly — under fifteen words, one quote per
 thread — and always link the thread so the user can read it themselves.
 
@@ -191,6 +240,11 @@ For each survivor, the main model (not a scout) judges feasibility:
   scope until it fits.
 - What are the real blockers — platform review policy, an API that doesn't exist,
   data access, a cold-start problem?
+- **Devil's advocate.** Write the strongest case against this idea in a few
+  lines: will users keep paying after month two (retention), do price × realistic
+  conversion beat the cost of acquiring a user, could a platform or a general AI
+  assistant absorb the feature, and does the builder have any edge in this domain?
+  Put the answer in the dossier under "What would change this verdict".
 
 Then score. Fill `hunt/scores.json` and run:
 
@@ -221,16 +275,23 @@ For the top pick, prepare — do not publish:
 - **Distribution drops**: short posts for X, LinkedIn and Instagram, plus a list
   of the exact Reddit threads and X support complaints found in Phases 1 and 5
   where this landing page would be a genuine, on-topic answer.
-- **The bar**: ten signups in a week is the green light. Fewer, and the pain
-  wasn't sharp enough — move to candidate #2 rather than rescuing this one.
+- **The bar**: signups only mean something against traffic. Define the test before
+  running it — for example, 200+ relevant visitors in a week and at least 5%
+  leaving an email, or better, a price-click or pre-order test, since an email is
+  not payment. Clearing that is the green light. Well under it with enough
+  traffic means the pain wasn't sharp enough — move to candidate #2 rather than
+  rescuing this one. Too little traffic is inconclusive, not a fail.
 
 Hand the drafts over with the target list. Posting, DMing, and account creation
 are the user's to do or explicitly authorize.
 
 ## Working notes
 
-- Keep everything in `hunt/`. Each phase writes its own file so a run can be
-  resumed and audited.
+- Keep everything in the run folder. Each phase writes its own file so a run can be
+  resumed and audited, and `manifest.md` records tools, actors and gaps.
+- Check scout returns before using them: open a couple of links per candidate,
+  reject returns that lack URLs, and re-run a malformed or failed scout once
+  before marking the source unavailable.
 - Report `unavailable` sources loudly. A hunt that skipped Sensor Tower and
   Reddit is a weaker artifact and the user should know which one they got.
 - When a scout returns something surprising — a niche earning far more than
@@ -241,10 +302,13 @@ are the user's to do or explicitly authorize.
 
 ## Reference files
 
+- `references/access.md` — how workers reach each source: Apify first, Agent
+  Reach second, manual last; credentials, failure rules, actor map.
 - `references/sources.md` — every source, its URL, cost, exactly what to pull
   from it, and a free fallback. Also the coverage checklist for Rule 3.
 - `references/scoring.md` — the 100-point rubric, weights, and kill gates.
 - `references/reddit-pmf.md` — the Phase 5 protocol in full.
 - `references/scouts/` — portable task briefs for delegated research workers.
 - `assets/dossier-template.md` — the report format.
-- `scripts/score.py` — scorer; enforces gates and ranks candidates.
+- `scripts/score.py` — scorer; enforces gates, checks scores against evidence,
+  ranks candidates. `scripts/test_score.py` tests it.
