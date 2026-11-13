@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{APP_NAME}} - {{HEADLINE}}</title>
+<meta name="description" content="{{SUBHEAD}}">
+<style>
+  :root { --bg:#fff; --fg:#111; --mute:#555; --accent:#0a5cff; --line:#e3e3e3; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#0e0e10; --fg:#f4f4f5; --mute:#a1a1aa; --accent:#6b9bff; --line:#2a2a2e; } }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg); font:17px/1.55 system-ui,-apple-system,Segoe UI,Roboto,sans-serif; }
+  main { max-width:640px; margin:0 auto; padding:48px 16px; }
+  h1 { font-size:clamp(2rem,6vw,3rem); line-height:1.1; margin:0 0 16px; }
+  .sub { color:var(--mute); font-size:1.15rem; margin:0 0 32px; }
+  ul { padding-left:1.2em; } li { margin:8px 0; }
+  form { display:flex; gap:8px; flex-wrap:wrap; margin:32px 0 8px; }
+  input[type=email] { flex:1 1 240px; padding:14px; font:inherit; border:1px solid var(--line); border-radius:10px; background:transparent; color:inherit; }
+  button { padding:14px 22px; font:inherit; font-weight:600; border:0; border-radius:10px; background:var(--accent); color:#fff; cursor:pointer; }
+  :focus-visible { outline:3px solid var(--accent); outline-offset:2px; }
+  small, footer { color:var(--mute); font-size:.9rem; }
+  footer { margin-top:48px; border-top:1px solid var(--line); padding-top:16px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>{{HEADLINE}}</h1>
+  <p class="sub">{{SUBHEAD}}</p>
+  <ul>
+    <li>{{PROOF_1}}</li>
+    <li>{{PROOF_2}}</li>
+    <li>{{PROOF_3}}</li>
+  </ul>
+  <!-- Replace action with your form endpoint or mailing-list embed. Nothing is wired up. -->
+  <form action="{{FORM_ENDPOINT}}" method="post">
+    <label for="email" hidden>Email</label>
+    <input id="email" name="email" type="email" required autocomplete="email" placeholder="you@example.com">
+    <button type="submit">{{CTA_LABEL}}</button>
+  </form>
+  <small>We will only email you about {{APP_NAME}}. Unsubscribe any time.</small>
+  <footer>{{APP_NAME}} is in development. This page gauges interest; nothing is for sale yet.</footer>
+</main>
+</body>
+</html>
