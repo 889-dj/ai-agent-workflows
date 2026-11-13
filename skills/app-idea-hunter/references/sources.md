@@ -65,7 +65,7 @@ where independents live.
 Free
 
 Take the top three to five apps in the domain and read their 1-star and 3-star
-reviews — 5-star reviews teach nothing. Phrase-mine: "I wish it did",
+reviews (run the review scout, `scouts/review-scout.md`) — 5-star reviews teach nothing. Phrase-mine: "I wish it did",
 "why can't it just", "annoying that it doesn't", "the only thing missing is".
 Each recurring complaint is an unbuilt product someone has already asked for.
 Count how many reviews say something similar; frequency is the signal.

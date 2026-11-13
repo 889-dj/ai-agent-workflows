@@ -64,7 +64,7 @@ ratings were observed at time of writing and will drift.
 | Reddit pain threads (Phase 1.5, 5) | `harshmaur/reddit-scraper` — has pain, willingness-to-pay, feature-request and asks-for-help flags plus a posted-after filter | `automation-lab/reddit-scraper`, `fatihtahta/reddit-scraper-search-fast` | Agent Reach Reddit; `site:reddit.com` search. Reddit may 403 cloud IPs on this path |
 | TikTok viral content (Phase 4) | `clockworks/tiktok-scraper` — keyword search, search sorting, minimum-likes filter | `apidojo/tiktok-scraper` | manual TikTok search |
 | Google Trends (Phase 3) | `apify/google-trends-scraper` — geo and time range | `scrapesage/google-trends-scraper` | trends.google.com by hand |
-| App reviews, charts (harvest) | `automation-lab/apple-app-store-scraper` (apps, charts, star-filtered reviews); `thewolves/appstore-reviews-scraper` | `neatrat/google-play-store-reviews-scraper` for Android | store pages |
+| App reviews, charts (harvest) | `automation-lab/apple-app-store-scraper` (apps, charts, star-filtered reviews: `mode: reviews`, `reviewMaxRating: 3`); `thewolves/appstore-reviews-scraper` | `neatrat/google-play-store-reviews-scraper` for Android (`ratingFilter`, `maxReviews`) | store pages. Feed rows to `scripts/review_themes.py` |
 | Product Hunt (harvest) | `maximedupre/product-hunt-scraper` | `memo23/producthunt-scraper` | producthunt.com leaderboards |
 | Flippa (harvest, money) | `fatihtahta/flippa-search-scraper` | `parseforge/flippa-scraper` | flippa.com listings. Small actors, treat as unproven |
 | X support complaints (harvest) | not verified — search the Store before relying on one | — | Agent Reach X, **opt-in only** |

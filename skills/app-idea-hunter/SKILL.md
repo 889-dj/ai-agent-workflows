@@ -106,7 +106,10 @@ The harvest grounds, and what each is actually for:
 - **App Store / Play Store top-grossing by category** — the incumbents.
 - **1-star and 3-star reviews of those incumbents** — phrase-mine for
   "I wish it did", "why can't it just", "annoying that it doesn't". Each is an
-  unbuilt feature someone already wants.
+  unbuilt feature someone already wants. Run `references/scouts/review-scout.md`
+  (App Store and Google Play review actors, then `scripts/review_themes.py`) for
+  every candidate niche that has real incumbents; this is not optional, because it
+  is the best source of specific, countable gaps.
 - **Support handles on X** (@NotionHQ, @SlackHQ, @ClickUp, @canva and equivalents
   in the user's domain) — public support threads are next month's feature
   requests, written by users, for free. A complaint that repeats is a market gap.
@@ -321,6 +324,7 @@ are the user's to do or explicitly authorize.
 - `references/reddit-pmf.md` — the Phase 5 protocol in full.
 - `references/scouts/` — portable task briefs for delegated research workers.
 - `assets/dossier-template.md` — the report format.
+- `scripts/review_themes.py` — counts recurring complaints in low-star reviews.
 - `scripts/pain_table.py` — evidence table and suggested T0–T3 grade.
 - `scripts/score.py` — scorer; enforces gates, checks scores against evidence,
   ranks candidates. `scripts/test_score.py` tests it.
