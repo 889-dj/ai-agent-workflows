@@ -52,6 +52,25 @@ A run that errored, was blocked, or returned zero rows with a failed status is
 **not** a T0. It is `unavailable`; say so and switch layer. Only a successful run
 with queries you can list counts as silence.
 
+## Shaping the query (learned from a live test)
+
+A first run used long natural-language phrases, `top` sort and `year` range, all
+of Reddit. It returned 52 posts and almost none were on topic: viral cat, drama and
+news threads. Reddit search matches loosely and `top` surfaces whatever was popular.
+Graded naively, that is a false T0. What worked:
+
+- **Short keyword queries** (`forgot to cancel subscription`), not full sentences.
+  Quoted phrases return fewer posts, so avoid them.
+- **Sort by relevance**, not top, for pain discovery. Use `new` with a posted-after
+  date for the recency check.
+- **Search inside the two to four subreddits** where the population gathers, one
+  run per subreddit, so the bar's "two subreddits" requirement is actually
+  collected. Restricting one run to a single subreddit can never pass it.
+- **Check topical yield before grading.** If most returned titles are off-topic,
+  the query failed; fix it and rerun, do not grade the noise.
+- Recent posts often show `score: 0`; do not read low scores on new threads as low
+  interest. Use comment counts as well.
+
 ## When the audience is not on Reddit
 
 Some buyers never post there (older consumers, many B2B roles, some regions).

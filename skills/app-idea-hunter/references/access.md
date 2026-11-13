@@ -70,6 +70,20 @@ ratings were observed at time of writing and will drift.
 | X support complaints (harvest) | not verified — search the Store before relying on one | — | Agent Reach X, **opt-in only** |
 | Acquire, TrustMRR, Sensor Tower, Astro, Viral Ad Library | not checked — search the Store; login-walled or paid sources often have no actor | — | user-supplied access, else the free proxies in `sources.md` |
 
+## Observed in a live test (`harshmaur/reddit-scraper`)
+
+- Two runs of 52 and 38 posts finished in about 50–60 seconds each and cost a
+  few cents. Rows carried title, subreddit, date, score, comment count and link.
+- The AI flag fields (`hasPain`, `wantsHelp`, `willingToPay`, `painPoint`) were
+  requested with `aiAnalysis` on but did **not** appear in the returned dataset.
+  Do not depend on them; read titles and bodies and grade yourself. Re-check if the
+  actor updates.
+- Query shape matters more than the tool; see "Shaping the query" in
+  `reddit-pmf.md`.
+- Dataset rows include large media fields. Request only the fields you need
+  (`title,communityName,createdAt,score,commentsCount,postUrl,body`) to keep
+  output small.
+
 ## Verification (orchestrator, not scout)
 
 Scouts return rows; the orchestrator checks them. Before accepting a
