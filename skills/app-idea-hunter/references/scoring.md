@@ -20,6 +20,10 @@ the kill list with the gate named.
 4. **Build exceeds the budget by more than ~50%** and cannot be cut down → dead.
 5. **Store-policy or safety hazard** — health claims, anything involving minors,
    anything that invites harassment → dead, no matter how good the numbers.
+6. **A fatal blocker** from `blockers.md` (the platform forbids it, the only data
+   source is closed, a legal bar) → dead as scoped. A narrower wedge that avoids it
+   can be rescored instead. A **major** blocker does not kill but caps feasibility
+   at 6 (the scorer rejects a higher value).
 
 A candidate that fails only gate 4 can be revived by cutting scope. Say so
 explicitly rather than silently dropping it.
@@ -152,6 +156,8 @@ cannot quietly contradict its own evidence.
   `declining` · `unknown`
 - `hazard`, `giant_category`, `first_video` — true/false
 - `confidence` per axis — `high` · `medium` · `low`
+- `blockers` — list of `{area, severity: minor|major|fatal, note, source}`; give the
+  list even when empty, and `unchecked_areas` for anything not checked
 
 ```json
 {

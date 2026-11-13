@@ -289,8 +289,13 @@ For each survivor, the main model (not a scout) judges feasibility:
   not a compromise.
 - Does it fit the Phase 0 build budget? Over by more than ~50% → kill, or cut
   scope until it fits.
-- What are the real blockers — platform review policy, an API that doesn't exist,
-  data access, a cold-start problem?
+- **Blocker checklist.** Go through all ten rows of `references/blockers.md` for the
+  wedge (platform policy, API and data dependencies, OS access, content and running
+  cost, legal and safety, cold start, distribution, regions, incumbent response,
+  builder fit), including anything the events scan tagged `blocker`. Record each as
+  minor, major or fatal with a source. A major blocker caps feasibility at 6; a fatal
+  one is a kill gate (unless a narrower wedge avoids it). Add a `blockers` list to
+  `scores.json`, even if empty, and list any area you could not check.
 - **Devil's advocate.** Write the strongest case against this idea in a few
   lines: will users keep paying after month two (retention), do price × realistic
   conversion beat the cost of acquiring a user, could a platform or a general AI
@@ -365,6 +370,7 @@ are the user's to do or explicitly authorize.
   Reach second, manual last; credentials, failure rules, actor map.
 - `references/sources.md` — every source, its URL, cost, exactly what to pull
   from it, and a free fallback. Also the coverage checklist for Rule 3.
+- `references/blockers.md` — the ten-row blocker checklist and severities.
 - `references/revenue.md` — the revenue evidence ladder and proxy signals.
 - `references/scoring.md` — the 100-point rubric, weights, and kill gates.
 - `references/reddit-pmf.md` — the Phase 5 protocol in full.

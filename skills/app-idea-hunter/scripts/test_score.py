@@ -146,6 +146,45 @@ class ScoreTests(unittest.TestCase):
         live, _ = self.rows(cand())
         self.assertTrue(any("confidence not recorded" in w for w in live[0]["warnings"]))
 
+    def test_fatal_blocker_kills(self):
+        _, dead = self.rows(cand(blockers=[{"area": "API", "severity": "fatal", "note": "only data source closed", "source": "x"}]))
+        self.assertEqual(len(dead), 1)
+        self.assertTrue(any("Fatal blocker" in g for g in dead[0]["gates_failed"]))
+
+    def test_major_blocker_caps_feasibility(self):
+        b = [{"area": "API", "severity": "major", "note": "paid API", "source": "https://x"}]
+        live, _ = self.rows(cand(blockers=b))  # feasibility 6 is allowed
+        self.assertEqual(len(live), 1)
+        with self.assertRaises(SystemExit):
+            self.rows(cand(blockers=b, scores={"pain": 12, "money": 18, "demand": 15, "marketability": 12, "feasibility": 8}))
+
+    def test_minor_blocker_does_not_cap(self):
+        b = [{"area": "legal", "severity": "minor", "note": "avoid medical claims"}]
+        live, _ = self.rows(cand(blockers=b, scores={"pain": 12, "money": 18, "demand": 15, "marketability": 12, "feasibility": 10}))
+        self.assertEqual(len(live), 1)
+
+    def test_empty_blockers_list_means_checklist_done(self):
+        live, _ = self.rows(cand(blockers=[]))
+        self.assertFalse(any("blocker checklist" in w for w in live[0]["warnings"]))
+        live, _ = self.rows(cand())
+        self.assertTrue(any("blocker checklist" in w for w in live[0]["warnings"]))
+
+    def test_blocker_validation(self):
+        with self.assertRaises(SystemExit):
+            self.rows(cand(blockers=[{"severity": "huge", "note": "x"}]))
+        with self.assertRaises(SystemExit):
+            self.rows(cand(blockers=[{"severity": "major"}]))
+        with self.assertRaises(SystemExit):
+            self.rows(cand(blockers="none"))
+
+    def test_major_blocker_without_source_warns(self):
+        live, _ = self.rows(cand(blockers=[{"severity": "major", "note": "paid API"}]))
+        self.assertTrue(any("no source" in w for w in live[0]["warnings"]))
+
+    def test_unchecked_areas_reported(self):
+        live, _ = self.rows(cand(blockers=[], unchecked_areas=["Regional availability"]))
+        self.assertTrue(any("not checked" in w for w in live[0]["warnings"]))
+
     def test_t3_wins_within_five_points(self):
         t2 = cand(name="t2", scores={"pain": 18, "money": 18, "demand": 15, "marketability": 12, "feasibility": 10})
         t3 = cand(name="t3", pmf_tier="T3", scores={"pain": 25, "money": 18, "demand": 14, "marketability": 8, "feasibility": 6})

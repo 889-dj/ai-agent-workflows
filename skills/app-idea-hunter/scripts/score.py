@@ -43,6 +43,10 @@ PAIN_CAP = {"T0": 0, "T1": 0, "T2": 18, "T3": 25}
 CONFIDENCE = {"high": 0.0, "medium": 0.10, "low": 0.25}
 
 
+BLOCKER_SEVERITY = {"minor": 0, "major": 1, "fatal": 2}
+MAJOR_FEASIBILITY_CAP = 6
+
+
 def fail(msg):
     raise SystemExit(f"error: {msg}")
 
@@ -103,6 +107,25 @@ def validate(c):
     if build is None or budget is None:
         warns.append("build_days/budget_days missing - budget gate not checked")
 
+    blockers = c.get("blockers")
+    if blockers is None:
+        warns.append("blocker checklist not recorded - add a 'blockers' list (it may be empty) after running references/blockers.md")
+    else:
+        if not isinstance(blockers, list):
+            fail(f"'{name}': blockers must be a list")
+        for i, b in enumerate(blockers, 1):
+            if not isinstance(b, dict) or b.get("severity") not in BLOCKER_SEVERITY:
+                fail(f"'{name}': blocker {i} needs a severity of {sorted(BLOCKER_SEVERITY)}")
+            if not b.get("note"):
+                fail(f"'{name}': blocker {i} needs a note saying what it is")
+            if b["severity"] in {"major", "fatal"} and not b.get("source"):
+                warns.append(f"blocker '{b.get('note')}' ({b['severity']}) has no source")
+        feas = (scores or {}).get("feasibility")
+        if feas is not None and feas > MAJOR_FEASIBILITY_CAP and any(b.get("severity") in {"major", "fatal"} for b in blockers):
+            fail(f"'{name}': feasibility {feas} is above {MAJOR_FEASIBILITY_CAP}, but a major or fatal blocker is recorded")
+    if c.get("unchecked_areas"):
+        warns.append("blocker areas not checked: " + ", ".join(map(str, c["unchecked_areas"])))
+
     conf = c.get("confidence")
     if conf is not None:
         if not isinstance(conf, dict):
@@ -157,6 +180,10 @@ def gate_failures(c):
 
     if as_bool(c, "hazard"):
         failed.append("Store-policy or safety hazard")
+
+    for b in (c.get("blockers") or []):
+        if isinstance(b, dict) and b.get("severity") == "fatal":
+            failed.append(f"Fatal blocker: {b.get('note')} (a narrower wedge may avoid it)")
 
     return failed, overrides
 

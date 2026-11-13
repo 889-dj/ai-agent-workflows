@@ -69,6 +69,12 @@ changes, shutdowns, regulation. Tag each opening / threat / blocker.>
 ### Feasibility — <n>/10
 <MVP scope, build estimate against budget, real blockers.>
 
+### Blockers
+<Each blocker from the checklist with severity and source, and any area not checked.
+A major blocker caps feasibility at 6; a fatal one kills the wedge as scoped.>
+
+| Area | Severity | What | Source |
+
 ### What would change this verdict
 <The one piece of evidence that would move this idea up or kill it.>
 

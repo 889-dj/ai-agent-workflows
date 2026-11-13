@@ -1,0 +1,27 @@
+{
+  "candidates": [
+    {
+      "name": "Running-only app (clean, no-upsell)",
+      "wedge": "Clean run tracker for people who pay for Strava and resent the upsells; free core, small one-time paid tier",
+      "pmf_tier": "T3",
+      "money_evidence": "listed",
+      "trend": "spiky",
+      "build_days": 9,
+      "budget_days": 14,
+      "hazard": false,
+      "giant_category": true,
+      "first_video": true,
+      "scores": {"pain": 25, "money": 10, "demand": 7, "marketability": 18, "feasibility": 6},
+      "confidence": {"pain": "high", "money": "low", "demand": "low", "marketability": "medium", "feasibility": "medium"},
+      "blockers": [
+        {"area": "API and data dependencies", "severity": "major",
+         "note": "Strava developer API now needs a paid subscription, so Strava sync may cost money",
+         "source": "https://www.reddit.com/r/Strava/comments/1ttvoby/strava_developer_now_needs_a_paid_subscription/"},
+        {"area": "Legal, privacy and safety", "severity": "minor",
+         "note": "avoid injury or medical claims in training plans", "source": ""}
+      ],
+      "unchecked_areas": ["Regional availability"],
+      "notes": "Worked example from a live hunt: strong pain, no revenue data, unreliable trend."
+    }
+  ]
+}
