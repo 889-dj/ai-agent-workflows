@@ -166,8 +166,12 @@ Write `hunt/02-money.md`.
 Use `references/scouts/demand-scout.md` for each survivor.
 
 - **Google Trends** on the core keyword, 5-year, the user's target geo plus
-  worldwide. Flat or declining → kill. Up and to the right → proceed. Record the
-  shape of the curve, not just a number.
+  worldwide, **plus a control term**. Run `scripts/trend_check.py`: it classifies
+  the shape and flags curves shared by unrelated terms as artifacts. Flat or
+  declining → kill. Up and to the right → proceed. A shared or artifact curve is
+  scored `spiky`, and a second independent signal is required (rising related
+  queries, recent-activity share, Reddit volume over time, or recent TikTok).
+  Record the shape of the curve, not just a number.
 - **Keyword research, by platform.** For mobile apps: App Store keywords (Astro,
   or the free proxies in `references/sources.md`); the target zone is **popularity
   above 20 with difficulty below 50** — real search volume that isn't yet
@@ -352,6 +356,7 @@ are the user's to do or explicitly authorize.
 - `references/reddit-pmf.md` — the Phase 5 protocol in full.
 - `references/scouts/` — portable task briefs for delegated research workers.
 - `assets/dossier-template.md` — the report format.
+- `scripts/trend_check.py` — classifies Trends curves and flags shared artifacts.
 - `scripts/review_themes.py` — counts recurring complaints in low-star reviews.
 - `scripts/pain_table.py` — evidence table and suggested T0–T3 grade.
 - `scripts/score.py` — scorer; enforces gates, checks scores against evidence,

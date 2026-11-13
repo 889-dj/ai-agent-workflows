@@ -98,7 +98,8 @@ ratings were observed at time of writing and will drift.
   caps the whole run, not each keyword, so a second keyword can get nothing; raise
   it or run one keyword per call. It returns price, rating and rating count, not
   revenue, so it supports "incumbents exist", never a revenue claim.
-- **Google Trends can show a shared artifact.** Two unrelated terms ("subscription
+- **Google Trends can show a shared artifact** (`scripts/trend_check.py` now
+  detects it). Two unrelated terms ("subscription
   tracker", "running app") returned near-identical curves: flat to mid-2025, a
   step in Aug 2025, a peak around May 2026, a fall since Oct 2026. When two
   different terms share a shape, treat it as unreliable (`spiky`) and lean on the

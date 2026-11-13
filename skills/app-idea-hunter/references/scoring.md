@@ -58,7 +58,9 @@ independents.
 Trend direction and keyword opportunity, per Phase 3.
 
 - 12 for trend: rising in both geo and worldwide = 12, rising in one = 8,
-  spiky or seasonal = 5, flat = 0
+  spiky or seasonal = 5, flat = 0. A curve flagged by `trend_check.py` as a shared
+  artifact is `spiky`; if a second independent signal agrees it is rising, you may
+  argue for `rising_one` and must say what the second signal was.
 - 8 for keywords: a keyword in the target zone (popularity >20, difficulty <50)
   = 8, close to the zone = 5, everything contested = 2, unavailable = null
 
