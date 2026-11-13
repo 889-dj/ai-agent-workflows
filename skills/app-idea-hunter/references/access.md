@@ -112,6 +112,27 @@ ratings were observed at time of writing and will drift.
 - **One run per subreddit** with 3–4 short keyword queries gives clean, on-topic
   rows; running-niche subreddits (`running`, `Strava`, `AdvancedRunning`) each
   returned 37–62 usable rows in about a minute.
+- **Review actors, observed** (`automation-lab/apple-app-store-scraper`, mode
+  `reviews`, `reviewMaxRating: 3`, `reviewSort: mostRecent`): 4–17 seconds per app.
+  Apple returns only what exists, so a small app can give far fewer than the
+  requested count (one returned 52 of 120). Use one run per app so the cap applies
+  per app. `neatrat/google-play-store-reviews-scraper` rejects `ratingFilter` as an
+  array; use the single `rating` field (one run per star level). Its free-account
+  limit is **5 runs and 500 reviews in total**, so plan the runs before spending
+  them.
+- **Scripts cannot read MCP-only data.** With only the Apify connector (no API
+  token in the environment) the dataset rows come back into the conversation, not
+  into a file, so `review_themes.py` and `pain_table.py` cannot read them. The scout
+  then tallies by hand, says so, and states how many reviews it read. With
+  `APIFY_TOKEN` set, download the dataset to a file and run the scripts.
+- **Release bugs are not themes.** A burst of reviews about one bad release (music
+  muting after a Strava update, a mobile-data bug, a broken iPad layout) shows an
+  incumbent's reliability problem but is not a recurring unmet need. Count it
+  separately.
+- **Event dates matter.** An events search can return old stories as if current
+  (Strava's layoffs and price rise were 2022–2023, Nike Run Club leaving China was
+  2022). Check each date against the 12–18 month window and label older items as
+  context.
 - A thread that looks like a signal can be a scam or noise. Read the post and a
   few comments before counting it (a "paid for a bad app" thread turned out to be
   a cancellation-page scam).
