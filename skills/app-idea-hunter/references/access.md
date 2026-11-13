@@ -84,6 +84,24 @@ ratings were observed at time of writing and will drift.
   (`title,communityName,createdAt,score,commentsCount,postUrl,body`) to keep
   output small.
 
+### Other actors, observed
+
+- **`apify/google-trends-scraper`** — worked, 25–55s per run. The weekly timeline
+  for one term is about 60 KB of JSON, so reading it costs real context: fetch a
+  single term at a time and read only the shape. Related-queries are cheap and
+  useful but expose ambiguous terms: "subscription tracker" was dominated by
+  fitness and AirTag queries, so check the related list before trusting a shape.
+- **`clockworks/tiktok-scraper`** — worked in about 15s. Most-liked sorting returns
+  popular but loosely matched videos (unrelated viral posts appeared for
+  "cancel subscriptions"); filter by topic before counting videos above 100k likes.
+- **`automation-lab/apple-app-store-scraper`** — worked in about 7s. `maxItems`
+  caps the whole run, not each keyword, so a second keyword can get nothing; raise
+  it or run one keyword per call. It returns price, rating and rating count, not
+  revenue, so it supports "incumbents exist", never a revenue claim.
+- A thread that looks like a signal can be a scam or noise. Read the post and a
+  few comments before counting it (a "paid for a bad app" thread turned out to be
+  a cancellation-page scam).
+
 ## Verification (orchestrator, not scout)
 
 Scouts return rows; the orchestrator checks them. Before accepting a
