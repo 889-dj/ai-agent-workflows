@@ -41,12 +41,19 @@ headline whenever possible - paraphrase real complaints, never invent quotes.
    - Optional price test (see below).
    - Footer: a line saying it is in development, a privacy note, and an unsubscribe
      promise.
-3. **Page build** (`smoke-test/index.html`): a single static file, no build step,
-   mobile-first, fast, accessible (labels, contrast, focus states), with the form
-   `action` as a clearly marked placeholder for the user's form endpoint
-   (e.g. a form-backend URL or mailing-list embed). Include a plain,
-   privacy-respecting analytics note, but no trackers by default. Use
-   `assets/page-template.html` as the starting point.
+3. **Page build** (`smoke-test/index.html`): a premium single-file page, not a
+   bare form. Read `references/design-standards.md` first; it is the quality bar.
+   Write the copy into a JSON file (see `assets/example-values.json`) and fill
+   `assets/page-template.html` with `scripts/fill_template.py`. The template ships
+   a dark editorial design, an animated headline, a product mock built from the
+   core loop, a "what it will never do" strip, three benefit cards, a closing
+   CTA, GSAP + ScrollTrigger + Lenis motion that degrades to a complete static
+   page, and an honest form (it shows "not connected yet" until a real https
+   endpoint is set, never a fake success). Adapt the accent colour, mock content
+   and section copy to the product; if the default look does not suit the
+   category, change the design, not just the words. Optionally study the design
+   skills listed in the standards file, but never install third-party skills
+   without telling the user.
 4. **Price test (optional, only if the user wants it):** after the email field,
    show the intended plan and price and a "Notify me when it launches" confirm
    step, or a two-variant split of prices across two URLs. Be explicit on the page
@@ -58,12 +65,20 @@ headline whenever possible - paraphrase real complaints, never invent quotes.
    when a rule would forbid the post. Disclose that you built the thing. Draft
    posts for X/LinkedIn/Instagram as well. Never astroturf: no fake accounts, no
    fake upvotes, no pretending to be a user.
-6. **Readout template** (`smoke-test/RESULTS.md`): a blank table for visits,
+6. **Verify in a browser** (do not skip): screenshot at 1440x900 and 390x844 after
+   the intro, scroll the whole page, confirm no horizontal overflow, no console
+   errors, the form visible above the fold on mobile, the success state
+   (`?demo` preview), and that the page is complete with the CDN scripts
+   blocked and with reduced motion on. Fix anything that looks generic or broken
+   before handoff; if no browser is available, say what was not seen.
+7. **Readout template** (`smoke-test/RESULTS.md`): a blank table for visits,
    signups, conversion by source and headline, plus the decision rule copied
    from step 1, ready to fill in.
 
 ## Rules
 
+- Looks matter: a page that looks like a template will not earn an email. Meet
+  every item in `references/design-standards.md`.
 - Honesty beats conversion: no fabricated social proof, no fake scarcity, no
   claim the app does something it will not.
 - Collect the minimum: email only. State what it is used for.

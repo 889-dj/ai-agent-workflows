@@ -1,44 +1,363 @@
 <!doctype html>
+<!--
+  Premium waitlist page template for landing-page-smoke-test.
+  Single file. Content is fully visible with no JS; GSAP + ScrollTrigger + Lenis
+  (pinned CDN versions) only enhance it. Respects prefers-reduced-motion.
+  Replace every double-brace token. {{FORM_ENDPOINT}} must be an https URL that accepts a POST
+  (e.g. a form backend); until it is, the form shows an honest "not connected" message
+  instead of silently losing emails. Add ?demo to the URL to preview the success state.
+-->
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{{APP_NAME}} - {{HEADLINE}}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{{APP_NAME}} — {{HEADLINE}}</title>
 <meta name="description" content="{{SUBHEAD}}">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0a0a0b">
+<meta property="og:title" content="{{APP_NAME}} — {{HEADLINE}}">
+<meta property="og:description" content="{{SUBHEAD}}">
+<meta name="twitter:card" content="summary">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 <style>
-  :root { --bg:#fff; --fg:#111; --mute:#555; --accent:#0a5cff; --line:#e3e3e3; }
-  @media (prefers-color-scheme: dark) { :root { --bg:#0e0e10; --fg:#f4f4f5; --mute:#a1a1aa; --accent:#6b9bff; --line:#2a2a2e; } }
-  * { box-sizing: border-box; }
-  body { margin:0; background:var(--bg); color:var(--fg); font:17px/1.55 system-ui,-apple-system,Segoe UI,Roboto,sans-serif; }
-  main { max-width:640px; margin:0 auto; padding:48px 16px; }
-  h1 { font-size:clamp(2rem,6vw,3rem); line-height:1.1; margin:0 0 16px; }
-  .sub { color:var(--mute); font-size:1.15rem; margin:0 0 32px; }
-  ul { padding-left:1.2em; } li { margin:8px 0; }
-  form { display:flex; gap:8px; flex-wrap:wrap; margin:32px 0 8px; }
-  input[type=email] { flex:1 1 240px; padding:14px; font:inherit; border:1px solid var(--line); border-radius:10px; background:transparent; color:inherit; }
-  button { padding:14px 22px; font:inherit; font-weight:600; border:0; border-radius:10px; background:var(--accent); color:#fff; cursor:pointer; }
-  :focus-visible { outline:3px solid var(--accent); outline-offset:2px; }
-  small, footer { color:var(--mute); font-size:.9rem; }
-  footer { margin-top:48px; border-top:1px solid var(--line); padding-top:16px; }
+  :root{
+    --bg:#0a0a0b; --surface:#131316; --surface-2:#1a1a1e; --line:rgba(255,255,255,.09);
+    --text:#f4f4f2; --mute:#9a9aa3; --accent:{{ACCENT}}; --accent-ink:#0a0a0b; --danger:#ff6b5e;
+    --display:"Bricolage Grotesque",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+    --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+    --ease:cubic-bezier(.22,1,.36,1);
+  }
+  *{box-sizing:border-box;margin:0}
+  html{color-scheme:dark;-webkit-text-size-adjust:100%}
+  html.lenis,html.lenis body{height:auto}
+  .lenis.lenis-smooth{scroll-behavior:auto!important}
+  body{background:var(--bg);color:var(--text);font:400 17px/1.55 var(--display);font-feature-settings:"ss01";overflow-x:hidden;-webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  .wrap{width:min(1120px,100% - 32px);margin-inline:auto}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:8px}
+
+  /* ambient background */
+  .glow{position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(600px 420px at var(--mx,70%) var(--my,10%),color-mix(in srgb,var(--accent) 16%,transparent),transparent 70%),
+      radial-gradient(900px 600px at 10% 90%,rgba(255,255,255,.035),transparent 70%)}
+  .grain{position:fixed;inset:-50%;pointer-events:none;z-index:1;opacity:.05;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+  main,header,footer{position:relative;z-index:2}
+
+  /* nav */
+  nav{display:flex;align-items:center;justify-content:space-between;padding:20px 0}
+  .logo{font-weight:800;letter-spacing:-.02em;font-size:20px;text-decoration:none;display:flex;align-items:center;gap:10px}
+  .logo i{width:12px;height:12px;border-radius:50%;background:var(--accent);box-shadow:0 0 18px var(--accent)}
+  .nav-cta{font-size:14px;font-weight:700;text-decoration:none;padding:10px 16px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.03);transition:background .3s var(--ease),border-color .3s}
+  .nav-cta:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.2)}
+
+  /* hero */
+  .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center;padding:56px 0 96px;min-height:calc(100svh - 80px)}
+  .pill{display:inline-flex;gap:8px;align-items:center;font:500 13px var(--mono);color:var(--mute);border:1px solid var(--line);padding:7px 12px;border-radius:999px;background:rgba(255,255,255,.03)}
+  .pill b{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:pulse 2.4s ease-in-out infinite}
+  @keyframes pulse{50%{opacity:.35}}
+  h1{font-size:clamp(2.6rem,7vw,5.4rem);line-height:.98;letter-spacing:-.035em;font-weight:800;margin:22px 0 22px;text-wrap:balance}
+  h1 .w{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.08em;margin-bottom:-.08em}
+  h1 .w>span{display:inline-block;will-change:transform}
+  h1 em{font-style:normal;color:var(--accent)}
+  .sub{font-size:clamp(1.05rem,2.2vw,1.3rem);color:var(--mute);max-width:34em;text-wrap:pretty}
+
+  /* form */
+  .signup{margin-top:34px;max-width:520px}
+  .field{display:flex;gap:8px;padding:6px;border-radius:18px;background:var(--surface);border:1px solid var(--line);transition:border-color .3s,box-shadow .3s}
+  .field:focus-within{border-color:color-mix(in srgb,var(--accent) 70%,transparent);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 16%,transparent)}
+  .field input{flex:1;min-width:0;background:none;border:0;color:var(--text);font:inherit;font-size:16px;padding:14px 14px;outline:none}
+  .field input::placeholder{color:#6d6d76}
+  .btn{position:relative;border:0;cursor:pointer;font:700 16px var(--display);color:var(--accent-ink);background:var(--accent);padding:0 22px;border-radius:13px;min-height:48px;white-space:nowrap;transition:transform .35s var(--ease),filter .3s;will-change:transform}
+  .btn:hover{filter:brightness(1.08)}
+  .btn:active{transform:scale(.97)}
+  .btn[disabled]{opacity:.6;cursor:progress}
+  .note{margin-top:12px;font-size:13.5px;color:var(--mute);min-height:1.4em}
+  .note.err{color:var(--danger)}
+  .done{display:none;align-items:center;gap:14px;padding:18px 20px;border-radius:18px;background:color-mix(in srgb,var(--accent) 10%,var(--surface));border:1px solid color-mix(in srgb,var(--accent) 45%,transparent)}
+  .signup.ok .field,.signup.ok .note{display:none}
+  .signup.ok .done{display:flex}
+  .done svg{flex:none;width:28px;height:28px}
+  .done strong{display:block;font-size:17px}
+  .done span{color:var(--mute);font-size:14.5px}
+  .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+
+  /* phone */
+  .stage{display:grid;place-items:center;perspective:1200px}
+  .phone{width:min(300px,78vw);aspect-ratio:9/18.6;border-radius:46px;padding:10px;background:linear-gradient(160deg,#2a2a30,#0f0f12);box-shadow:0 40px 90px -20px rgba(0,0,0,.8),0 0 0 1px rgba(255,255,255,.1),0 0 80px -10px color-mix(in srgb,var(--accent) 25%,transparent);transform-style:preserve-3d;will-change:transform}
+  .screen{height:100%;border-radius:37px;background:#0d0d10;padding:22px 20px 20px;display:flex;flex-direction:column;overflow:hidden;position:relative}
+  .screen::before{content:"";position:absolute;top:9px;left:50%;translate:-50% 0;width:86px;height:24px;border-radius:99px;background:#000}
+  .s-top{display:flex;justify-content:space-between;font:500 11px var(--mono);color:var(--mute);margin-top:22px}
+  .s-big{font:500 clamp(2.2rem,9vw,2.9rem)/1 var(--mono);letter-spacing:-.04em;margin-top:18px;font-variant-numeric:tabular-nums}
+  .s-label{font-size:12px;color:var(--mute);margin-top:4px}
+  .s-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+  .s-card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:11px 12px}
+  .s-card b{display:block;font:500 19px var(--mono);font-variant-numeric:tabular-nums;letter-spacing:-.03em}
+  .s-card small{color:var(--mute);font-size:11px}
+  .route{flex:1;min-height:0;margin-top:14px;border-radius:16px;background:var(--surface);border:1px solid var(--line);display:grid;place-items:center;overflow:hidden}
+  .route svg{width:100%;height:100%}
+  .route path.base{stroke:rgba(255,255,255,.07)}
+  .route path.live{stroke:var(--accent);filter:drop-shadow(0 0 6px var(--accent))}
+  .s-btn{margin-top:14px;text-align:center;font-weight:800;font-size:15px;padding:13px;border-radius:14px;background:var(--accent);color:var(--accent-ink)}
+  .tag{margin-top:18px;font:500 12px var(--mono);color:var(--mute);text-align:center}
+
+  /* sections */
+  section{padding:96px 0}
+  .kicker{font:500 13px var(--mono);color:var(--accent);letter-spacing:.06em;text-transform:uppercase}
+  h2{font-size:clamp(2rem,5vw,3.6rem);line-height:1.02;letter-spacing:-.03em;font-weight:800;margin:14px 0 0;max-width:15em;text-wrap:balance}
+
+  .never{display:flex;flex-wrap:wrap;gap:12px;margin-top:40px}
+  .never span{font-size:clamp(1.1rem,3vw,1.6rem);font-weight:700;padding:14px 22px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--mute);position:relative}
+  .never span::after{content:"";position:absolute;left:18px;right:18px;top:50%;height:2px;background:var(--danger);transform-origin:left;transform:scaleX(var(--strike,1));border-radius:2px}
+
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:48px}
+  .card{padding:28px;border-radius:24px;background:linear-gradient(180deg,var(--surface-2),var(--surface));border:1px solid var(--line);transition:transform .5s var(--ease),border-color .3s}
+  .card:hover{transform:translateY(-6px);border-color:rgba(255,255,255,.2)}
+  .card .n{font:500 13px var(--mono);color:var(--accent)}
+  .card h3{font-size:1.45rem;letter-spacing:-.02em;margin:14px 0 10px;line-height:1.15}
+  .card p{color:var(--mute);font-size:16px}
+
+  .final{text-align:center;border-top:1px solid var(--line)}
+  .final h2{margin-inline:auto}
+  .final .signup{margin:34px auto 0}
+  .final .sub{margin:18px auto 0}
+
+  footer{padding:28px 0 48px;color:var(--mute);font-size:13.5px;border-top:1px solid var(--line)}
+  footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+  /* motion-safe initial states: only when JS + animations will run */
+  html.anim [data-rise],html.anim .phone{opacity:0}
+  html.anim .never span{--strike:0}
+
+  @media (max-width:880px){
+    .hero{grid-template-columns:1fr;padding-top:24px;min-height:0;gap:56px}
+    .cards{grid-template-columns:1fr}
+    section{padding:72px 0}
+  }
+  @media (max-width:480px){
+    .field{flex-direction:column}
+    .btn{width:100%}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+  }
 </style>
 </head>
 <body>
-<main>
-  <h1>{{HEADLINE}}</h1>
-  <p class="sub">{{SUBHEAD}}</p>
-  <ul>
-    <li>{{PROOF_1}}</li>
-    <li>{{PROOF_2}}</li>
-    <li>{{PROOF_3}}</li>
-  </ul>
-  <!-- Replace action with your form endpoint or mailing-list embed. Nothing is wired up. -->
-  <form action="{{FORM_ENDPOINT}}" method="post">
-    <label for="email" hidden>Email</label>
-    <input id="email" name="email" type="email" required autocomplete="email" placeholder="you@example.com">
-    <button type="submit">{{CTA_LABEL}}</button>
-  </form>
-  <small>We will only email you about {{APP_NAME}}. Unsubscribe any time.</small>
-  <footer>{{APP_NAME}} is in development. This page gauges interest; nothing is for sale yet.</footer>
+<div class="glow" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+
+<header class="wrap">
+  <nav>
+    <a class="logo" href="#top" aria-label="{{APP_NAME}}"><i></i>{{APP_NAME}}</a>
+    <a class="nav-cta" href="#join">{{NAV_CTA}}</a>
+  </nav>
+</header>
+
+<main id="top">
+  <div class="wrap hero">
+    <div>
+      <span class="pill" data-rise><b></b>{{EYEBROW}}</span>
+      <h1 aria-label="{{HEADLINE_PLAIN}}">{{HEADLINE_HTML}}</h1>
+      <p class="sub" data-rise>{{SUBHEAD}}</p>
+
+      <div class="signup" id="join" data-rise>
+        <form class="js-form" data-endpoint="{{FORM_ENDPOINT}}" novalidate>
+          <div class="field">
+            <label for="email-1" hidden>Email address</label>
+            <input id="email-1" name="email" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com" required>
+            <button class="btn" type="submit" data-magnet>{{CTA_LABEL}}</button>
+          </div>
+          <input class="hp" type="text" name="company" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <p class="note" role="status" aria-live="polite">{{PRIVACY_NOTE}}</p>
+        </form>
+        <div class="done" role="status">
+          <svg viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="13" stroke="var(--accent)" stroke-width="2"/><path class="tick" d="M8 14.5l4 4 8-9" stroke="var(--accent)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div><strong>{{SUCCESS_TITLE}}</strong><span>{{SUCCESS_BODY}}</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stage" aria-hidden="true">
+      <div class="phone" id="phone">
+        <div class="screen">
+          <div class="s-top"><span>{{MOCK_TOP_LEFT}}</span><span>{{MOCK_TOP_RIGHT}}</span></div>
+          <div class="s-big" data-count="{{MOCK_BIG_VALUE}}" data-fmt="{{MOCK_BIG_FMT}}">{{MOCK_BIG_TEXT}}</div>
+          <div class="s-label">{{MOCK_BIG_LABEL}}</div>
+          <div class="s-grid">
+            <div class="s-card"><b>{{MOCK_A_VALUE}}</b><small>{{MOCK_A_LABEL}}</small></div>
+            <div class="s-card"><b>{{MOCK_B_VALUE}}</b><small>{{MOCK_B_LABEL}}</small></div>
+          </div>
+          <div class="route">
+            <svg viewBox="0 0 220 150" fill="none" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+              <path class="base" d="M20 112 C40 70 62 126 88 92 S128 28 150 66 S186 120 202 42"/>
+              <path class="live" id="route" d="M20 112 C40 70 62 126 88 92 S128 28 150 66 S186 120 202 42"/>
+            </svg>
+          </div>
+          <div class="s-btn">{{MOCK_BUTTON}}</div>
+        </div>
+      </div>
+      <p class="tag">{{MOCK_TAG}}</p>
+    </div>
+  </div>
+
+  <section class="wrap" id="never">
+    <p class="kicker" data-rise>{{NEVER_KICKER}}</p>
+    <h2 data-rise>{{NEVER_TITLE}}</h2>
+    <div class="never">
+      <span>{{NEVER_1}}</span><span>{{NEVER_2}}</span><span>{{NEVER_3}}</span><span>{{NEVER_4}}</span>
+    </div>
+  </section>
+
+  <section class="wrap" id="what">
+    <p class="kicker" data-rise>{{WHAT_KICKER}}</p>
+    <h2 data-rise>{{WHAT_TITLE}}</h2>
+    <div class="cards">
+      <article class="card" data-rise><span class="n">01</span><h3>{{PROOF_1_TITLE}}</h3><p>{{PROOF_1_BODY}}</p></article>
+      <article class="card" data-rise><span class="n">02</span><h3>{{PROOF_2_TITLE}}</h3><p>{{PROOF_2_BODY}}</p></article>
+      <article class="card" data-rise><span class="n">03</span><h3>{{PROOF_3_TITLE}}</h3><p>{{PROOF_3_BODY}}</p></article>
+    </div>
+  </section>
+
+  <section class="final">
+    <div class="wrap">
+      <p class="kicker" data-rise>{{FINAL_KICKER}}</p>
+      <h2 data-rise>{{FINAL_TITLE}}</h2>
+      <p class="sub" data-rise>{{FINAL_SUB}}</p>
+      <div class="signup" data-rise>
+        <form class="js-form" data-endpoint="{{FORM_ENDPOINT}}" novalidate>
+          <div class="field">
+            <label for="email-2" hidden>Email address</label>
+            <input id="email-2" name="email" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com" required>
+            <button class="btn" type="submit" data-magnet>{{CTA_LABEL}}</button>
+          </div>
+          <input class="hp" type="text" name="company" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <p class="note" role="status" aria-live="polite">{{PRIVACY_NOTE}}</p>
+        </form>
+        <div class="done" role="status">
+          <svg viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="13" stroke="var(--accent)" stroke-width="2"/><path class="tick" d="M8 14.5l4 4 8-9" stroke="var(--accent)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div><strong>{{SUCCESS_TITLE}}</strong><span>{{SUCCESS_BODY}}</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
 </main>
+
+<footer>
+  <div class="wrap"><span>{{FOOTER_NOTE}}</span><span>© {{YEAR}} {{APP_NAME}}</span></div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
+<script>
+(function(){
+  var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var hasLibs = !!(window.gsap && window.ScrollTrigger);
+
+  /* ---------- form (works with or without the animation libraries) ---------- */
+  var demo = /[?&]demo\b/.test(location.search);
+  document.querySelectorAll(".js-form").forEach(function(form){
+    var box = form.closest(".signup"), note = form.querySelector(".note"), btn = form.querySelector(".btn");
+    var idle = note.textContent;
+    form.addEventListener("submit", function(e){
+      e.preventDefault();
+      var email = form.email.value.trim();
+      if (form.company.value) return;                         // honeypot
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+        note.textContent = "That email doesn't look right — check it and try again.";
+        note.classList.add("err"); form.email.focus(); return;
+      }
+      note.classList.remove("err"); note.textContent = "Adding you…"; btn.disabled = true;
+      var ep = form.dataset.endpoint || "";
+      var finish = function(){ box.classList.add("ok"); if (hasLibs && !reduce) {
+        gsap.fromTo(box.querySelector(".done"),{y:12,opacity:0},{y:0,opacity:1,duration:.6,ease:"power3.out"});
+        var t = box.querySelector(".tick"); if (t && t.getTotalLength) { var L=t.getTotalLength(); gsap.fromTo(t,{strokeDasharray:L,strokeDashoffset:L},{strokeDashoffset:0,duration:.6,delay:.15,ease:"power2.out"}); } } };
+      if (demo) { setTimeout(finish, 400); return; }
+      if (!/^https:\/\//.test(ep)) {                          // refuse to pretend it worked
+        note.textContent = "The waitlist isn't connected yet. Please try again soon.";
+        note.classList.add("err"); btn.disabled = false; return;
+      }
+      fetch(ep, {method:"POST", body:new FormData(form), headers:{Accept:"application/json"}})
+        .then(function(r){ if (!r.ok) throw new Error(r.status); finish(); })
+        .catch(function(){ note.textContent = "Something went wrong. Please try again."; note.classList.add("err"); btn.disabled = false; });
+    });
+    form.email.addEventListener("input", function(){ if (note.classList.contains("err")) { note.classList.remove("err"); note.textContent = idle; } });
+  });
+
+  if (reduce || !hasLibs) return;                            // content is already visible
+
+  /* ---------- motion ---------- */
+  document.documentElement.classList.add("anim");
+  gsap.registerPlugin(ScrollTrigger);
+
+  if (window.Lenis) {
+    var lenis = new Lenis({ lerp: 0.1, smoothWheel: true });
+    lenis.on("scroll", ScrollTrigger.update);
+    gsap.ticker.add(function(t){ lenis.raf(t * 1000); });
+    gsap.ticker.lagSmoothing(0);
+    document.querySelectorAll('a[href^="#"]').forEach(function(a){
+      a.addEventListener("click", function(e){ var el = document.querySelector(a.getAttribute("href")); if (el) { e.preventDefault(); lenis.scrollTo(el, {offset:-24}); } });
+    });
+  }
+
+  // headline words rise out of a mask; the rest fades up; the phone settles in
+  var words = document.querySelectorAll("h1 .w>span");
+  gsap.set(words, { yPercent:110 });
+  gsap.set("[data-rise]", { y:28 });
+  gsap.set(".phone", { y:60, rotateX:10 });
+  var introDone = false;
+  var intro = gsap.timeline({ defaults:{ ease:"power4.out" }, onComplete:function(){ introDone = true; } });
+  intro.to(words, { yPercent:0, duration:1.1, stagger:.07 }, .1)
+       .to(".hero [data-rise]", { opacity:1, y:0, duration:.9, stagger:.1 }, .35)
+       .to(".phone", { opacity:1, y:0, rotateX:0, duration:1.4 }, .3);
+
+  // route draws itself, numbers count up
+  var route = document.getElementById("route");
+  if (route.getTotalLength) { var L = route.getTotalLength();
+    gsap.set(route, { strokeDasharray:L, strokeDashoffset:L });
+    gsap.to(route, { strokeDashoffset:0, duration:3.2, ease:"power2.inOut", delay:1, repeat:-1, repeatDelay:1.4, yoyo:false }); }
+  var big = document.querySelector("[data-count]");
+  if (big && big.dataset.count) {
+    var target = parseFloat(big.dataset.count), fmt = big.dataset.fmt, o = { v:0 };
+    var pad = function(n){ return String(Math.floor(n)).padStart(2,"0"); };
+    gsap.to(o, { v:target, duration:2.2, delay:.8, ease:"power3.out", onUpdate:function(){
+      big.textContent = fmt === "clock" ? pad(o.v/3600)+":"+pad((o.v%3600)/60)+":"+pad(o.v%60) : o.v.toFixed(fmt === "int" ? 0 : 2); } });
+  }
+
+  // phone follows the pointer a little (desktop only)
+  if (matchMedia("(hover:hover) and (pointer:fine)").matches) {
+    var phone = document.getElementById("phone"), glow = document.querySelector(".glow");
+    var rx = gsap.quickTo(phone, "rotationY", {duration:.8, ease:"power3"}), ry = gsap.quickTo(phone, "rotationX", {duration:.8, ease:"power3"});
+    addEventListener("pointermove", function(e){
+      if (!introDone) return;
+      var x = e.clientX / innerWidth, y = e.clientY / innerHeight;
+      rx((x - .5) * 14); ry(-(y - .5) * 10);
+      glow.style.setProperty("--mx", (x*100)+"%"); glow.style.setProperty("--my", (y*100)+"%");
+    });
+    document.querySelectorAll("[data-magnet]").forEach(function(b){
+      var mx = gsap.quickTo(b,"x",{duration:.5,ease:"power3"}), my = gsap.quickTo(b,"y",{duration:.5,ease:"power3"});
+      b.addEventListener("pointermove", function(e){ var r=b.getBoundingClientRect(); mx((e.clientX-r.left-r.width/2)*.18); my((e.clientY-r.top-r.height/2)*.28); });
+      b.addEventListener("pointerleave", function(){ mx(0); my(0); });
+    });
+  }
+
+  // scroll reveals
+  gsap.utils.toArray("section [data-rise]").forEach(function(el, i){
+    gsap.to(el, { opacity:1, y:0, duration:.9, ease:"power3.out",
+      scrollTrigger:{ trigger:el, start:"top 88%", once:true } });
+  });
+  gsap.utils.toArray(".never span").forEach(function(s, i){
+    gsap.to(s, { "--strike":1, duration:.7, ease:"power3.inOut", delay:i*.12,
+      scrollTrigger:{ trigger:".never", start:"top 80%", once:true } });
+  });
+  gsap.to(".phone", { yPercent:-6, ease:"none", scrollTrigger:{ trigger:".hero", start:"top top", end:"bottom top", scrub:true } });
+
+  addEventListener("load", function(){ ScrollTrigger.refresh(); });
+})();
+</script>
 </body>
 </html>
