@@ -28,6 +28,14 @@ good sign and you should report it plainly rather than hedging.
    one giant, or is there a spread of mid-size independents? A spread is the
    better market for a solo builder.
 
+## Revenue evidence, step by step
+
+Read `references/revenue.md`. Work down the evidence ladder for each incumbent:
+Flippa/Acquire listings, TrustMRR, dated public statements, paid estimates, then
+proxies. Fetch each incumbent's pricing page for tiers and trial terms. If you only
+have proxies, run the App Store results through `scripts/incumbent_signals.py` and
+report its signal strength. Never turn a rating count into a dollar figure.
+
 ## Rules
 
 - Reach sources in this order: the Apify actor named in your brief, then Agent
@@ -45,6 +53,7 @@ good sign and you should report it plainly rather than hedging.
 ```
 ## Candidate: <idea>
 Money verdict: PROVEN | THIN | NONE | UNKNOWN (<one line why>)
+Evidence rung reached: 1-7 (see revenue.md)  |  Proxy signal strength: strong | moderate | weak | n/a
 
 ### Incumbents
 | Product | Platform | Price | Model | Revenue | Source type | Link |

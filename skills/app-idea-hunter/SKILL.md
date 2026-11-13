@@ -142,8 +142,11 @@ Use `references/scouts/revenue-scout.md`, one assignment per candidate, batched
 around eight at a time when parallel workers are available.
 
 For each candidate the scout establishes: who the incumbents are, what they appear
-to earn (Sensor Tower estimates, Flippa and Acquire asking prices and stated
-monthly revenue, TrustMRR entries), and how they monetize.
+to earn, and how they monetize. Follow the evidence ladder in
+`references/revenue.md`: listings with stated revenue and TrustMRR first, dated
+public statements and paid estimates next, and only then proxy signals
+(`scripts/incumbent_signals.py`). Proxies cap the money axis, so a hunt with no
+revenue numbers should say that plainly and name the lookup that would settle it.
 
 Competition is the signal you want. Silence is a graveyard — an empty niche
 usually means nobody could get paid there. **Kill any candidate where a proper
@@ -306,6 +309,7 @@ are the user's to do or explicitly authorize.
   Reach second, manual last; credentials, failure rules, actor map.
 - `references/sources.md` — every source, its URL, cost, exactly what to pull
   from it, and a free fallback. Also the coverage checklist for Rule 3.
+- `references/revenue.md` — the revenue evidence ladder and proxy signals.
 - `references/scoring.md` — the 100-point rubric, weights, and kill gates.
 - `references/reddit-pmf.md` — the Phase 5 protocol in full.
 - `references/scouts/` — portable task briefs for delegated research workers.

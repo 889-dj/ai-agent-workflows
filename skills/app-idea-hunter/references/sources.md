@@ -110,7 +110,7 @@ count as a rough proxy, and mark the money axis low-confidence. Do not convert a
 rank into a revenue number.
 
 ### Flippa / Acquire listings, TrustMRR
-See above. For the money phase these are your highest-trust figures, because a
+See above, and `revenue.md` for the full evidence ladder. For the money phase these are your highest-trust figures, because a
 human attested to them.
 
 ---

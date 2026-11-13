@@ -43,8 +43,11 @@ Is anyone already paid here, per Phase 2.
 - 25 — several independents visibly earning; verified figures (TrustMRR, or a
   marketplace listing with stated revenue)
 - 18 — clear incumbents with estimated revenue (Sensor Tower) and visible pricing
-- 10 — incumbents exist, monetization visible, no revenue data
-- 0 — nothing (kill gate)
+- up to 14 — strong proxy signals but no revenue data (three or more independents
+  at mid size with a visible paywall); 10 for moderate, 6 for weak. Proxies can
+  never reach the 18 or 25 bands. See `revenue.md` and
+  `scripts/incumbent_signals.py`.
+- 0 — nothing found after a proper search (kill gate)
 
 If the category is one giant and nothing else, set `"giant_category": true`. The
 script subtracts 5 from this axis for you — do not subtract it by hand. A single
