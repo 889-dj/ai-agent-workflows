@@ -1,2 +1,7 @@
 __pycache__/
 *.pyc
+
+# Output from running the skills on a real idea - never commit
+/design/
+/smoke-test/
+/running-test/
