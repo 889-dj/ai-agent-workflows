@@ -42,6 +42,12 @@ Write the first video for this app in one sentence — the hook, not a descripti
 If you cannot write it from what you found, say so explicitly. That failure is
 the most useful thing in your report.
 
+## Tools
+
+Reach sources in this order: the Apify actor named in your brief, then Agent
+Reach, then manual lookup. A failed or blocked run is `unavailable`, never a
+flat trend or a quiet niche. Say which tool produced each figure.
+
 ## Return format
 
 ```

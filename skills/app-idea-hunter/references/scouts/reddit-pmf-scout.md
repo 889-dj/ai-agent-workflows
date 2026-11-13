@@ -10,6 +10,15 @@ Everything before you was inference from markets. You check the thing itself:
 Read `references/reddit-pmf.md` from the skill directory before you start. It has
 the query patterns and the evidence bar. This file is the summary you work from.
 
+## How to collect
+
+Reach Reddit in this order: the Apify Reddit actor named in your brief, then Agent
+Reach, then `site:reddit.com` web search. Return the actor or tool you used. A
+failed, blocked or errored run is `unavailable` — never grade it T0. Only a
+successful run with a query list you can show is a null result. If the audience
+plausibly isn't on Reddit, also cover the fallback sources in the brief and say
+which you used.
+
 ## How to search
 
 Search the **pain**, never the product name. Someone with this problem does not
@@ -29,6 +38,14 @@ domain vocabulary with these patterns:
 Then find the two to four subreddits where this population actually gathers and
 search inside them. Sort by top of the past year, and separately check the past
 month for recency.
+
+## Deep-read before you grade
+
+After the search pass, choose the three strongest threads and fetch them with
+comments (thread links in `startUrls`, comments on, about 25–30 each). Report, for
+each: what people use instead, any willingness to pay, the defenders and their
+upvotes, the exact complaint, and any scam or promo replies you excluded. Grading
+from titles alone is not allowed.
 
 ## What counts as evidence
 
@@ -51,6 +68,9 @@ explicitly asking what tool they should use.**
   spreadsheets, shortcuts and manual routines to cope. This is the strongest
   signal that exists.
 
+Count a cross-posted thread once. Every thread row needs a working link and a
+real date.
+
 Grade honestly. T0 and T1 are kills, and a wrongly generous grade here costs the
 user weeks of building. Under-calling a good idea costs one more search.
 
@@ -66,17 +86,26 @@ user weeks of building. Under-calling a good idea costs one more search.
 
 ```
 ## Candidate: <idea>
-PMF grade: T0 | T1 | T2 | T3
-Gate: PASS | KILL
+PMF grade: T0 | T1 | T2 | T3 | UNAVAILABLE (<reason>)
+Gate: PASS | KILL | UNKNOWN
+Tool used: <actor name or Agent Reach or manual>
 Bar check: threads <n>/5 | subreddits <n>/2 | recent <yes/no> | asked-for-tool <yes/no>
 
 ### Threads
 | Subreddit | What the person said (paraphrased) | Date | Upvotes | Link |
 
+### Deep read (3 threads)
+| Thread link | Uses instead | Would pay / pays | Defenders (count, top upvotes) | Exact complaint |
+
 ### Pattern
 - The recurring complaint: <one or two lines>
 - Current workaround: <what people do instead>
 - Willingness to pay signals: <or "none seen">
+
+### Evidence rows
+Return every thread you read as JSON rows for `scripts/pain_table.py`: url,
+community, date, label (own_problem, paying, hacking, contented, defender, promo,
+scam, noise), asked_for_tool, upvotes, comments, short paraphrase.
 
 ### Queries run
 <list every query, so a kill can be audited>

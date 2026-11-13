@@ -1,0 +1,15 @@
+{
+  "candidate": "Running-only app (clean, no-upsell)",
+  "threads": [
+    {"url": "https://www.reddit.com/r/Strava/comments/1w8legr/upsells_are_so_bad_what_to_replace_strava_with/", "community": "Strava", "date": "2026-09-06", "label": "own_problem", "asked_for_tool": true, "upvotes": 187, "comments": 187, "note": "tired of upsells, asks what to replace Strava with"},
+    {"url": "https://www.reddit.com/r/Strava/comments/1x1pajs/strava_seems_to_have_gone_off_the_rails/", "community": "Strava", "date": "2026-10-09", "label": "own_problem", "asked_for_tool": false, "upvotes": 316, "comments": 149, "note": "general backlash"},
+    {"url": "https://www.reddit.com/r/Strava/comments/1qd2d69/is_it_just_me_or_is_the_strava_subscription/", "community": "Strava", "date": "2026-01-14", "label": "paying", "asked_for_tool": false, "upvotes": 241, "comments": 173, "note": "subscription hard to justify"},
+    {"url": "https://www.reddit.com/r/AdvancedRunning/comments/1pm9o3z/is_there_room_for_a_real_strava_competitor_whats/", "community": "AdvancedRunning", "date": "2025-12-14", "label": "own_problem", "asked_for_tool": true, "upvotes": 0, "comments": 49, "note": "asks what is missing or broken in Strava"},
+    {"url": "https://www.reddit.com/r/running/comments/1pb4b7q/best_running_app_for_marathon_training_and_why/", "community": "running", "date": "2025-12-01", "label": "own_problem", "asked_for_tool": true, "upvotes": 109, "comments": 146, "note": "asks which app; NRC loved but buggy; many use spreadsheets"},
+    {"url": "https://www.reddit.com/r/running/comments/1pb4b7q/best_running_app_for_marathon_training_and_why/#sheet", "community": "running", "date": "2025-12-01", "label": "hacking", "asked_for_tool": false, "upvotes": 7, "comments": 0, "note": "spreadsheet and paper notebook instead of an app"},
+    {"url": "https://www.reddit.com/r/Strava/comments/1w8legr/#homeassistant", "community": "Strava", "date": "2026-09-06", "label": "hacking", "asked_for_tool": false, "upvotes": 10, "comments": 0, "note": "self-built Home Assistant pipeline after the API paywall"},
+    {"url": "https://www.reddit.com/r/Strava/comments/1w8legr/#defender", "community": "Strava", "date": "2026-09-06", "label": "defender", "asked_for_tool": false, "upvotes": 34, "comments": 0, "note": "'free product, tiny complaint'"},
+    {"url": "https://www.reddit.com/r/running/comments/1velmeh/ive_cancelled_four_training_apps_in_18_months/", "community": "running", "date": "2026-08-03", "label": "own_problem", "asked_for_tool": false, "upvotes": 0, "comments": 13, "note": "churn across training apps"},
+    {"url": "https://www.reddit.com/r/running/comments/1pbooqp/", "community": "running", "date": "2025-12-01", "label": "noise", "asked_for_tool": false, "upvotes": 0, "comments": 11, "note": "ChatGPT vs training programs, off topic"}
+  ]
+}

@@ -40,6 +40,74 @@ Then find the two to four subreddits where this population actually gathers and
 search inside them directly. Sort by top of the past year for depth, and check
 the past month separately for whether it is still live.
 
+## How to collect the threads
+
+Use the access layers in `access.md`: the Apify Reddit actor first (it returns
+dated, linked rows and, on some actors, flags for pain, willingness to pay and
+feature requests — treat those flags as a way to sort, never as the grade), Agent
+Reach second, manual `site:reddit.com` search last. Pull a few dozen posts per
+query batch, with comments where people answer "what do you use?".
+
+A run that errored, was blocked, or returned zero rows with a failed status is
+**not** a T0. It is `unavailable`; say so and switch layer. Only a successful run
+with queries you can list counts as silence.
+
+## Deep-read the strongest threads (required)
+
+Titles tell you a thread exists; the comments tell you whether the pain is real.
+In the running hunt the decisive evidence sat in the comments: what people switched
+to, who defended the incumbent, and the one reply saying "I'd pay for a clean
+version". So for every candidate that survives the search pass:
+
+1. Pick the **3 strongest threads**: highest on-topic engagement (comments count
+   matters more than score on recent posts), preferring ones that ask for a tool or
+   describe a workaround.
+2. Fetch each with its comments: run the Reddit actor with the thread links in
+   `startUrls`, comments on, about 25–30 comments per thread. It takes seconds and
+   costs a few cents.
+3. Read for these five things and write them down:
+   - **What people switched to or use instead** (the real competitors and
+     workarounds, including spreadsheets and DIY).
+   - **Willingness to pay**: anyone saying they pay, would pay, or paid and regret it.
+   - **Defenders**: people who think the complaint is unreasonable. Count them and
+     their upvotes; a strong defender camp weakens the pain.
+   - **Specifics**: the exact feature or frustration, in the people's own terms.
+   - **Scams and promo**: replies that are really ads or fraud, so they are not
+     counted as evidence.
+4. Put these in the evidence table (`scripts/pain_table.py`) and in the dossier's
+   Pain section.
+
+If a thread has under about ten comments, read another one instead.
+
+## Shaping the query (learned from a live test)
+
+A first run used long natural-language phrases, `top` sort and `year` range, all
+of Reddit. It returned 52 posts and almost none were on topic: viral cat, drama and
+news threads. Reddit search matches loosely and `top` surfaces whatever was popular.
+Graded naively, that is a false T0. What worked:
+
+- **Short keyword queries** (`forgot to cancel subscription`), not full sentences.
+  Quoted phrases return fewer posts, so avoid them.
+- **Sort by relevance**, not top, for pain discovery. Use `new` with a posted-after
+  date for the recency check.
+- **Search inside the two to four subreddits** where the population gathers, one
+  run per subreddit, so the bar's "two subreddits" requirement is actually
+  collected. Restricting one run to a single subreddit can never pass it.
+- **Check topical yield before grading.** If most returned titles are off-topic,
+  the query failed; fix it and rerun, do not grade the noise.
+- Recent posts often show `score: 0`; do not read low scores on new threads as low
+  interest. Use comment counts as well.
+
+## When the audience is not on Reddit
+
+Some buyers never post there (older consumers, many B2B roles, some regions).
+Then add the places they do talk: niche forums, App Store and Play Store reviews of
+incumbents, YouTube comments, X threads, Discord or Facebook groups where
+reachable. The same bar applies per source type, the report names which sources
+were used, and a pass from outside Reddit is graded the same way. Silence on
+Reddit alone is not a T0 for an audience that is not there; it is `not
+applicable` plus a note.
+
 ## What counts
 
 A thread counts when a person describes the problem as **their own**.
@@ -58,6 +126,11 @@ All four, or the candidate does not pass:
 - across at least **2** distinct subreddits
 - at least **1** from the past **6 months**
 - at least **1** person **explicitly asking what tool to use**
+
+The numbers are a floor for a mid-size niche, not a law: for a very small
+niche, say so and justify a lower thread count in the report rather than quietly
+passing. For a huge niche, five threads is easy and proves little, so look at
+recurrence and upvotes too.
 
 Two subreddits matters because a single community can have a local obsession that
 does not generalize. Recency matters because a problem solved in 2022 by a good
@@ -85,6 +158,24 @@ inferred.
 
 Grade honestly in both directions. A generous grade costs the user weeks of
 building; an ungenerous one costs one more round of searching.
+
+## Record every thread in the evidence table
+
+Do not grade from memory. Label every thread you looked at in a small JSON file
+(`assets/example-pmf-running.json` shows the format) and run
+`python3 scripts/pain_table.py hunt/pmf-<candidate>.json`. Labels: `own_problem`,
+`paying`, `hacking`, `contented`, `defender`, `promo`, `scam`, `noise`. The script
+checks the evidence bar, counts each thread once, reports the on-topic rate and
+the defender weight, and suggests a grade. It only suggests: read the deep-read
+notes and confirm. A low on-topic rate means the query was poor, not that the niche
+is dead.
+
+## Verifying before you trust
+
+The orchestrator opens at least two of the returned thread links at random per
+candidate and confirms each exists, is dated as stated, and says what the row
+claims. Cross-posts of one thread count once. Returns without links, or with links
+that do not match their claims, are discarded and re-run.
 
 ## Handling what you find
 

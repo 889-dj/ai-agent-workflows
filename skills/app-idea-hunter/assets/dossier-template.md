@@ -1,8 +1,9 @@
 # App Idea Hunt — <domain> — <date>
 
 **Scope:** <domain> · <build budget> days · <platform> · <monetization>
-**Sources covered:** <n>/<total> — unavailable: <list, or "none">
-**Funnel:** <n> harvested → <n> passed money → <n> passed demand →
+**Sources covered:** <n>/<total> — unavailable: <list, or "none"> — not applicable: <list, or "none">
+**Tools used:** <per phase: Apify actor / Agent Reach / manual>
+**Funnel:** <n> harvested → <n> passed the cheap screen → <n> passed money → <n> passed demand →
 <n> passed marketability → <n> passed the Reddit gate
 
 ---
@@ -21,8 +22,11 @@ Reddit gate, that says something about the domain the user should hear.>
 
 ## Scorecard
 
-| # | Idea | Pain | Money | Demand | Market | Feas. | Total | Verdict |
-|---|---|---|---|---|---|---|---|---|
+| # | Idea | Pain | Money | Demand | Market | Feas. | Total | Range | Confidence | Verdict |
+|---|---|---|---|---|---|---|---|---|---|---|
+
+<If the verdict is sensitive (the range crosses a band), say which axis to firm up
+and how.>
 
 ---
 
@@ -31,6 +35,10 @@ Reddit gate, that says something about the domain the user should hear.>
 **The problem, in one sentence.** <who has it, what hurts>
 
 **The app, in one sentence.** <one problem, one feature>
+
+**The wedge.** <the specific person, the one complaint it fixes with its count, what
+it deliberately is not, and why an incumbent will not simply fix it. Fallback
+wedge: <a second cut>>
 
 ### Pain — <n>/25 · PMF <tier>
 <What people actually said, paraphrased. Bar check: threads / subreddits /
@@ -52,8 +60,20 @@ which tool produced them.>
 
 **First video:** "<the one-sentence hook>"
 
+### What changed recently
+<The events that matter, each with its date and source: acquisitions, paywall or API
+changes, shutdowns, regulation. Tag each opening / threat / blocker.>
+
+| Date | Event | Tag | Source |
+
 ### Feasibility — <n>/10
 <MVP scope, build estimate against budget, real blockers.>
+
+### Blockers
+<Each blocker from the checklist with severity and source, and any area not checked.
+A major blocker caps feasibility at 6; a fatal one kills the wedge as scoped.>
+
+| Area | Severity | What | Source |
 
 ### What would change this verdict
 <The one piece of evidence that would move this idea up or kill it.>

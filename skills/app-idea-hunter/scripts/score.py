@@ -2,7 +2,8 @@
 """Score and rank app-idea candidates for the app-idea-hunter skill.
 
 Reads hunt/scores.json (schema in references/scoring.md), applies the hard kill
-gates, sums the weighted axes, and prints a ranked scorecard plus a kill list.
+gates, validates that the hand-entered axis scores agree with the structured
+evidence fields, sums the axes, and prints a ranked scorecard plus a kill list.
 
 Usage:
     python3 scripts/score.py hunt/scores.json
@@ -14,24 +15,162 @@ import json
 import sys
 
 MAX = {"pain": 25, "money": 25, "demand": 20, "marketability": 20, "feasibility": 10}
+
+TIERS = {"T0", "T1", "T2", "T3"}
 DEAD_TIERS = {"T0", "T1"}
+
+# money_evidence: how well the "someone is paid here" claim is backed.
+#   verified  - attested figures (TrustMRR, marketplace listing with revenue)
+#   estimated - incumbents with estimated revenue (Sensor Tower etc.)
+#   listed    - incumbents + visible pricing, no revenue data
+#   unknown   - data could not be reached (NOT the same as none; never kills)
+#   none      - looked properly, nobody is earning (kills)
+MONEY = {"verified", "estimated", "listed", "unknown", "none"}
+
+TRENDS = {"rising_both", "rising_one", "spiky", "seasonal", "flat", "declining", "unknown"}
 DEAD_TRENDS = {"flat", "declining"}
+
+# Ceiling on the demand axis implied by the trend (12 trend pts + 8 keyword pts).
+DEMAND_CAP = {
+    "rising_both": 20, "rising_one": 16, "spiky": 13, "seasonal": 13,
+    "flat": 8, "declining": 8, "unknown": 20,
+}
+# Ceiling on the pain axis implied by the PMF tier.
+PAIN_CAP = {"T0": 0, "T1": 0, "T2": 18, "T3": 25}
+
+# Confidence in each axis score. The uncertainty is a share of the axis maximum:
+# a "low" money score could easily be off by a quarter of the axis.
+CONFIDENCE = {"high": 0.0, "medium": 0.10, "low": 0.25}
+
+
+BLOCKER_SEVERITY = {"minor": 0, "major": 1, "fatal": 2}
+MAJOR_FEASIBILITY_CAP = 6
+
+
+def fail(msg):
+    raise SystemExit(f"error: {msg}")
+
+
+def as_bool(c, key):
+    """Accept real booleans and the strings 'true'/'false'; reject anything else."""
+    v = c.get(key, False)
+    if isinstance(v, bool):
+        return v
+    if isinstance(v, str) and v.strip().lower() in {"true", "false"}:
+        return v.strip().lower() == "true"
+    fail(f"'{c.get('name')}': '{key}' must be true or false, got {v!r}")
+
+
+def validate(c):
+    """Check enums and cross-field consistency. Returns a list of warnings."""
+    name = c.get("name")
+    warns = []
+
+    tier = (c.get("pmf_tier") or "").upper() or None
+    if tier is not None and tier not in TIERS:
+        fail(f"'{name}': pmf_tier must be one of {sorted(TIERS)}, got {c.get('pmf_tier')!r}")
+
+    money = c.get("money_evidence")
+    if money is None:
+        warns.append("money_evidence missing - treated as 'unknown', not 'none'")
+    elif str(money).lower() not in MONEY:
+        fail(f"'{name}': money_evidence must be one of {sorted(MONEY)}, got {money!r}")
+
+    trend = (c.get("trend") or "unknown").lower()
+    if trend not in TRENDS:
+        fail(f"'{name}': trend must be one of {sorted(TRENDS)}, got {c.get('trend')!r}")
+
+    scores = c.get("scores") or {}
+    for axis, v in scores.items():
+        if axis not in MAX:
+            fail(f"'{name}': unknown axis '{axis}' (valid: {', '.join(MAX)})")
+        if v is None:
+            continue
+        if isinstance(v, bool) or not isinstance(v, (int, float)):
+            fail(f"'{name}': axis '{axis}' must be a number or null, got {v!r}")
+        if v < 0 or v > MAX[axis]:
+            fail(f"'{name}': axis '{axis}' is {v}, must be 0-{MAX[axis]}")
+
+    pain = scores.get("pain")
+    if tier and pain is not None and pain > PAIN_CAP[tier]:
+        fail(f"'{name}': pain {pain} is above the {PAIN_CAP[tier]} ceiling for tier {tier}")
+
+    demand = scores.get("demand")
+    if demand is not None and demand > DEMAND_CAP[trend]:
+        fail(f"'{name}': demand {demand} is above the {DEMAND_CAP[trend]} ceiling for trend '{trend}'")
+
+    mkt = scores.get("marketability")
+    if "first_video" in c and not as_bool(c, "first_video") and mkt is not None and mkt > 10:
+        fail(f"'{name}': marketability {mkt} exceeds 10, but no first-video sentence could be written")
+
+    build, budget = c.get("build_days"), c.get("budget_days")
+    if build is None or budget is None:
+        warns.append("build_days/budget_days missing - budget gate not checked")
+
+    blockers = c.get("blockers")
+    if blockers is None:
+        warns.append("blocker checklist not recorded - add a 'blockers' list (it may be empty) after running references/blockers.md")
+    else:
+        if not isinstance(blockers, list):
+            fail(f"'{name}': blockers must be a list")
+        for i, b in enumerate(blockers, 1):
+            if not isinstance(b, dict) or b.get("severity") not in BLOCKER_SEVERITY:
+                fail(f"'{name}': blocker {i} needs a severity of {sorted(BLOCKER_SEVERITY)}")
+            if not b.get("note"):
+                fail(f"'{name}': blocker {i} needs a note saying what it is")
+            if b["severity"] in {"major", "fatal"} and not b.get("source"):
+                warns.append(f"blocker '{b.get('note')}' ({b['severity']}) has no source")
+        feas = (scores or {}).get("feasibility")
+        if feas is not None and feas > MAJOR_FEASIBILITY_CAP and any(b.get("severity") in {"major", "fatal"} for b in blockers):
+            fail(f"'{name}': feasibility {feas} is above {MAJOR_FEASIBILITY_CAP}, but a major or fatal blocker is recorded")
+    if c.get("unchecked_areas"):
+        warns.append("blocker areas not checked: " + ", ".join(map(str, c["unchecked_areas"])))
+
+    conf = c.get("confidence")
+    if conf is not None:
+        if not isinstance(conf, dict):
+            fail(f"'{name}': confidence must be an object like {{\"money\": \"low\"}}")
+        for axis, level in conf.items():
+            if axis not in MAX:
+                fail(f"'{name}': confidence given for unknown axis '{axis}'")
+            if level not in CONFIDENCE:
+                fail(f"'{name}': confidence for '{axis}' must be one of {sorted(CONFIDENCE)}, got {level!r}")
+        # Evidence quality limits what you may claim.
+        if conf.get("money") == "high" and str(money or "unknown").lower() in {"listed", "unknown", "estimated"}:
+            fail(f"'{name}': money confidence cannot be 'high' with money_evidence '{money}' (need verified figures)")
+        if conf.get("demand") == "high" and trend in {"spiky", "unknown"}:
+            fail(f"'{name}': demand confidence cannot be 'high' when the trend is '{trend}'")
+        if conf.get("pain") == "high" and not tier:
+            fail(f"'{name}': pain confidence cannot be 'high' before Phase 5 has graded the candidate")
+    unrated = [a for a, v in scores.items() if v is not None and not (conf or {}).get(a)]
+    if unrated:
+        warns.append("confidence not recorded for: " + ", ".join(unrated))
+
+    return warns
 
 
 def gate_failures(c):
-    """Return the list of hard gates this candidate fails."""
-    failed = []
+    """Return (hard_failures, overrides). Overrides are gates waived with a reason."""
+    failed, overrides = [], []
     tier = (c.get("pmf_tier") or "").upper()
+    money = (c.get("money_evidence") or "unknown").lower()
+    trend = (c.get("trend") or "unknown").lower()
 
     if tier in DEAD_TIERS:
         failed.append(f"Reddit PMF gate ({tier}: pain not real or not sharp)")
     elif tier not in {"T2", "T3"}:
         failed.append("Reddit PMF gate (not graded - Phase 5 incomplete)")
 
-    if (c.get("money_evidence") or "none").lower() == "none":
-        failed.append("No money in the niche (silence is a graveyard)")
+    if money == "none":
+        if tier == "T3":
+            overrides.append(
+                "Money gate waived: T3 shows people already paying/hacking, but no "
+                "incumbent revenue was found - verify before building"
+            )
+        else:
+            failed.append("No money in the niche (silence is a graveyard)")
 
-    if (c.get("trend") or "").lower() in DEAD_TRENDS:
+    if trend in DEAD_TRENDS:
         failed.append("Trend flat or declining")
 
     build, budget = c.get("build_days"), c.get("budget_days")
@@ -39,26 +178,62 @@ def gate_failures(c):
         if build > budget * 1.5:
             failed.append(f"Build {build}d exceeds budget {budget}d by >50% (cut scope to revive)")
 
-    if c.get("hazard"):
+    if as_bool(c, "hazard"):
         failed.append("Store-policy or safety hazard")
 
-    return failed
+    for b in (c.get("blockers") or []):
+        if isinstance(b, dict) and b.get("severity") == "fatal":
+            failed.append(f"Fatal blocker: {b.get('note')} (a narrower wedge may avoid it)")
+
+    return failed, overrides
 
 
 def total(c):
     """Sum the axes. Returns (score, list_of_missing_axes)."""
+    scores = dict(c.get("scores") or {})
+    # A one-giant category is a harder market for a solo builder: -5 on money.
+    if as_bool(c, "giant_category") and scores.get("money") is not None:
+        scores["money"] = max(0, scores["money"] - 5)
     s, missing = 0, []
-    for axis, cap in MAX.items():
-        v = (c.get("scores") or {}).get(axis)
+    for axis in MAX:
+        v = scores.get(axis)
         if v is None:
             missing.append(axis)
-            continue
-        if not isinstance(v, (int, float)):
-            raise SystemExit(f"'{c.get('name')}': axis '{axis}' must be a number or null, got {v!r}")
-        if v < 0 or v > cap:
-            raise SystemExit(f"'{c.get('name')}': axis '{axis}' is {v}, must be 0-{cap}")
-        s += v
+        else:
+            s += v
     return s, missing
+
+
+def band(score):
+    if score >= 80:
+        return "BUILD"
+    if score >= 65:
+        return "STRONG"
+    if score >= 50:
+        return "PARKING LOT"
+    return "KILL"
+
+
+def confidence_range(c, score):
+    """Return (low, high, label, sensitive) for the total, or None if no confidence given.
+
+    Each scored axis contributes an uncertainty of (share of axis max) by its
+    confidence level; unrated axes are treated as 'medium'. The range is the total
+    plus or minus the summed uncertainty, kept within 0-100."""
+    scores = c.get("scores") or {}
+    conf = c.get("confidence") or {}
+    if not conf:
+        return None
+    unc = 0.0
+    for axis, cap in MAX.items():
+        if scores.get(axis) is None:
+            continue
+        unc += cap * CONFIDENCE[conf.get(axis, "medium")]
+    lo, hi = max(0, round(score - unc)), min(100, round(score + unc))
+    width = hi - lo
+    label = "low" if width >= 30 else "medium" if width >= 15 else "high"
+    sensitive = band(lo) != band(hi)
+    return lo, hi, label, sensitive
 
 
 def verdict(score, missing):
@@ -73,6 +248,57 @@ def verdict(score, missing):
     return "KILL (score)"
 
 
+def build_rows(cands):
+    names = [c.get("name") for c in cands]
+    for n in names:
+        if not n:
+            fail("every candidate needs a 'name'")
+    dupes = {n for n in names if names.count(n) > 1}
+    if dupes:
+        fail(f"duplicate candidate names: {', '.join(sorted(dupes))}")
+
+    live, dead = [], []
+    for c in cands:
+        warns = validate(c)
+        fails, overrides = gate_failures(c)
+        score, missing = total(c)
+        row = {
+            "name": c["name"],
+            "pmf_tier": c.get("pmf_tier"),
+            "axes": {a: (c.get("scores") or {}).get(a) for a in MAX},
+            "total": score,
+            "missing_axes": missing,
+            "warnings": warns + overrides,
+            "wedge": c.get("wedge"),
+            "notes": c.get("notes", ""),
+        }
+        if not c.get("wedge"):
+            row["warnings"].append("no wedge recorded - score a specific product, not a category (Phase 5.5)")
+        rng = confidence_range(c, score)
+        if rng:
+            lo, hi, label, sensitive = rng
+            row["confidence"] = {"range": [lo, hi], "overall": label, "verdict_could_flip": sensitive,
+                                 "by_axis": c.get("confidence")}
+            if sensitive:
+                row["warnings"].append(
+                    f"verdict is sensitive: total could be {lo}-{hi}, spanning {band(lo)} to {band(hi)}; "
+                    "raise confidence on the weakest axes before deciding")
+        if fails:
+            row["gates_failed"] = fails
+            dead.append(row)
+        else:
+            row["verdict"] = verdict(score, missing)
+            live.append(row)
+
+    # Complete candidates first. Observed demand beats inferred demand: T3 gets a
+    # 5-point sort bonus so it outranks T2 inside a 5-point band.
+    live.sort(
+        key=lambda r: (not r["missing_axes"], r["total"] + (5 if (r["pmf_tier"] or "").upper() == "T3" else 0)),
+        reverse=True,
+    )
+    return live, dead
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("path")
@@ -83,37 +309,15 @@ def main():
         with open(args.path) as f:
             data = json.load(f)
     except FileNotFoundError:
-        raise SystemExit(f"No such file: {args.path}")
+        fail(f"No such file: {args.path}")
     except json.JSONDecodeError as e:
-        raise SystemExit(f"{args.path} is not valid JSON: {e}")
+        fail(f"{args.path} is not valid JSON: {e}")
 
     cands = data.get("candidates")
     if not cands:
-        raise SystemExit("scores.json has no 'candidates' array")
+        fail("scores.json has no 'candidates' array")
 
-    live, dead = [], []
-    for c in cands:
-        if not c.get("name"):
-            raise SystemExit("every candidate needs a 'name'")
-        fails = gate_failures(c)
-        score, missing = total(c)
-        row = {
-            "name": c["name"],
-            "pmf_tier": c.get("pmf_tier"),
-            "axes": {a: (c.get("scores") or {}).get(a) for a in MAX},
-            "total": score,
-            "missing_axes": missing,
-            "notes": c.get("notes", ""),
-        }
-        if fails:
-            row["gates_failed"] = fails
-            dead.append(row)
-        else:
-            row["verdict"] = verdict(score, missing)
-            live.append(row)
-
-    # Observed demand beats inferred demand: T3 outranks T2 inside a 5-point band.
-    live.sort(key=lambda r: (r["total"] + (5 if r["pmf_tier"] == "T3" else 0)), reverse=True)
+    live, dead = build_rows(cands)
 
     if args.json:
         json.dump({"survivors": live, "killed": dead}, sys.stdout, indent=2)
@@ -135,8 +339,15 @@ def main():
                 f"{cell(a['marketability']):>6}{cell(a['feasibility']):>6}"
                 f"{r['total']:>7}  {r['verdict']}"
             )
+            if r.get("wedge"):
+                print(f"   wedge: {r['wedge']}")
+            if r.get("confidence"):
+                cf = r["confidence"]
+                print(f"   confidence: {cf['overall']} (total could be {cf['range'][0]}-{cf['range'][1]})")
             if r["missing_axes"]:
                 print(f"   ^ unscored: {', '.join(r['missing_axes'])} - fill these before trusting the rank")
+            for w in r["warnings"]:
+                print(f"   ! {w}")
     else:
         print("Nothing survived the gates. That is a finding, not a failure -")
         print("report the kill list and widen the harvest.\n")

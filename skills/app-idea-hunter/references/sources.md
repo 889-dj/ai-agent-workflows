@@ -65,7 +65,7 @@ where independents live.
 Free
 
 Take the top three to five apps in the domain and read their 1-star and 3-star
-reviews — 5-star reviews teach nothing. Phrase-mine: "I wish it did",
+reviews (run the review scout, `scouts/review-scout.md`) — 5-star reviews teach nothing. Phrase-mine: "I wish it did",
 "why can't it just", "annoying that it doesn't", "the only thing missing is".
 Each recurring complaint is an unbuilt product someone has already asked for.
 Count how many reviews say something similar; frequency is the signal.
@@ -110,7 +110,7 @@ count as a rough proxy, and mark the money axis low-confidence. Do not convert a
 rank into a revenue number.
 
 ### Flippa / Acquire listings, TrustMRR
-See above. For the money phase these are your highest-trust figures, because a
+See above, and `revenue.md` for the full evidence ladder. For the money phase these are your highest-trust figures, because a
 human attested to them.
 
 ---
@@ -196,7 +196,10 @@ over, wait.**
 
 ## Coverage checklist
 
-Tick before writing the report. Mark each: covered / unavailable (reason).
+Tick before writing the report.
+
+Mark each: covered / unavailable (reason) / not applicable (reason). Say which
+access layer from `access.md` produced the data.
 
 **Harvest** — Acquire high-to-low · Acquire under-$10k · Flippa · TrustMRR ·
 Product Hunt · top-grossing charts · incumbent 1-star reviews · X support
@@ -207,9 +210,15 @@ handles · niche comment sections · LLM ideation
 **Demand** — Google Trends (geo + worldwide) · Astro or proxies (popularity >20,
 difficulty <50)
 
+**Events** — market-events scan for the last 12–18 months (acquisitions, paywall
+and API changes, shutdowns, regulation), every event dated and sourced
+
 **Marketability** — Viral Ad Library (organic vs paid) · TikTok most-liked ·
 controversy read · first-video sentence
 
-**PMF** — Reddit gate, graded T0–T3, evidence bar checked
+**Screen** — feasibility and hazard sketch · Reddit smoke test
+
+**PMF** — Reddit gate (or fallback sources), graded T0–T3, evidence bar checked,
+links spot-checked
 
 **Feasibility** — one-problem-one-feature test · build budget · blockers

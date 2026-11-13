@@ -59,6 +59,10 @@ These are unproven guesses that still have to survive later validation phases.
 
 ## Rules
 
+- Reach sources in this order: the Apify actor named in your brief, then Agent
+  Reach, then manual browsing. Name the tool you used in `Status`.
+- A run that errored or was blocked is `blocked`, not "no candidates". Say which.
+
 - Record what you actually saw. If a number was not stated, write `not stated` —
   never estimate a revenue figure and never present an estimate as a fact.
 - Include a URL for every candidate that came from a page.

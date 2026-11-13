@@ -11,6 +11,13 @@ growing, and is there a keyword you could actually rank for?**
 Run the candidate's two or three core keywords — the words a sufferer would type,
 not the product category. "quit vaping" beats "smoking cessation software".
 
+Always include **one control term** in the same run: a generic, stable word
+unrelated to the niche (for example "weather" or "recipes"). Save each term's
+weekly values and run `python3 scripts/trend_check.py series.json`. It classifies
+each curve and flags terms that share one shape. If unrelated terms share a curve,
+or the control term moves too, the shape is a data artifact: report it as `spiky`,
+say why, and lean on the second signals below.
+
 For each keyword report the five-year shape (rising / flat / declining / spiky /
 seasonal), roughly where it sits now versus its all-time peak, and whether the
 pattern holds worldwide as well as in the user's target geography. A trend that
@@ -18,6 +25,18 @@ is rising only in one country is a smaller opportunity, not a dead one — say s
 rather than averaging it away.
 
 Flat or declining across the board is a kill signal. Report it as such.
+
+## Second signals (always get at least one)
+
+A single Trends curve is never enough. Add one independent signal and say whether
+it agrees:
+
+- **Rising related queries** and "Breakout" terms from the same Trends run.
+- **Recent-activity share** of ratings for the incumbents
+  (`scripts/incumbent_signals.py`): a high share means users are still arriving.
+- **Reddit volume over time**: count on-topic posts per month from the Reddit rows.
+- **Search trends on another property** (YouTube) if the actor supports it.
+- **TikTok recency**: whether recent videos, not just old ones, are performing.
 
 ## App Store keyword research
 
@@ -36,6 +55,12 @@ tool produced them.
 If you only had free proxies, say so and give a qualitative difficulty read
 (crowded / moderate / open) instead of a fake number. A missing number is
 recoverable; a made-up one is not.
+
+## Tools
+
+Reach sources in this order: the Apify actor named in your brief, then Agent
+Reach, then manual lookup. A failed or blocked run is `unavailable`, never a
+flat trend or a quiet niche. Say which tool produced each figure.
 
 ## Return format
 
