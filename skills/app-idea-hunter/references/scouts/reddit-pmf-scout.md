@@ -39,6 +39,14 @@ Then find the two to four subreddits where this population actually gathers and
 search inside them. Sort by top of the past year, and separately check the past
 month for recency.
 
+## Deep-read before you grade
+
+After the search pass, choose the three strongest threads and fetch them with
+comments (thread links in `startUrls`, comments on, about 25–30 each). Report, for
+each: what people use instead, any willingness to pay, the defenders and their
+upvotes, the exact complaint, and any scam or promo replies you excluded. Grading
+from titles alone is not allowed.
+
 ## What counts as evidence
 
 A thread counts when a person describes the problem as theirs. It does not count
@@ -85,6 +93,9 @@ Bar check: threads <n>/5 | subreddits <n>/2 | recent <yes/no> | asked-for-tool <
 
 ### Threads
 | Subreddit | What the person said (paraphrased) | Date | Upvotes | Link |
+
+### Deep read (3 threads)
+| Thread link | Uses instead | Would pay / pays | Defenders (count, top upvotes) | Exact complaint |
 
 ### Pattern
 - The recurring complaint: <one or two lines>

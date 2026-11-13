@@ -226,6 +226,10 @@ grade T0–T3:
 If the audience is unlikely to be on Reddit, use the fallback sources in
 `references/reddit-pmf.md` and treat a T2 as weaker than it looks.
 
+Do the deep read in `references/reddit-pmf.md`: fetch the three strongest threads
+with their comments and record what people switch to, who would pay, and who
+defends the incumbent. A grade given from titles alone is not valid.
+
 Paraphrase what people said. Quote sparingly — under fifteen words, one quote per
 thread — and always link the thread so the user can read it themselves.
 

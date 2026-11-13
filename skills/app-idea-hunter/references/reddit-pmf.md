@@ -52,6 +52,33 @@ A run that errored, was blocked, or returned zero rows with a failed status is
 **not** a T0. It is `unavailable`; say so and switch layer. Only a successful run
 with queries you can list counts as silence.
 
+## Deep-read the strongest threads (required)
+
+Titles tell you a thread exists; the comments tell you whether the pain is real.
+In the running hunt the decisive evidence sat in the comments: what people switched
+to, who defended the incumbent, and the one reply saying "I'd pay for a clean
+version". So for every candidate that survives the search pass:
+
+1. Pick the **3 strongest threads**: highest on-topic engagement (comments count
+   matters more than score on recent posts), preferring ones that ask for a tool or
+   describe a workaround.
+2. Fetch each with its comments: run the Reddit actor with the thread links in
+   `startUrls`, comments on, about 25–30 comments per thread. It takes seconds and
+   costs a few cents.
+3. Read for these five things and write them down:
+   - **What people switched to or use instead** (the real competitors and
+     workarounds, including spreadsheets and DIY).
+   - **Willingness to pay**: anyone saying they pay, would pay, or paid and regret it.
+   - **Defenders**: people who think the complaint is unreasonable. Count them and
+     their upvotes; a strong defender camp weakens the pain.
+   - **Specifics**: the exact feature or frustration, in the people's own terms.
+   - **Scams and promo**: replies that are really ads or fraud, so they are not
+     counted as evidence.
+4. Put these in the evidence table (`scripts/pain_table.py`) and in the dossier's
+   Pain section.
+
+If a thread has under about ten comments, read another one instead.
+
 ## Shaping the query (learned from a live test)
 
 A first run used long natural-language phrases, `top` sort and `year` range, all
