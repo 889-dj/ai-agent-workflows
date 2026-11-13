@@ -226,6 +226,9 @@ grade T0–T3:
 If the audience is unlikely to be on Reddit, use the fallback sources in
 `references/reddit-pmf.md` and treat a T2 as weaker than it looks.
 
+Label every thread you read and run `scripts/pain_table.py`; it checks the bar
+and suggests the grade, so a grade can be reproduced and audited.
+
 Do the deep read in `references/reddit-pmf.md`: fetch the three strongest threads
 with their comments and record what people switch to, who would pay, and who
 defends the incumbent. A grade given from titles alone is not valid.
@@ -318,5 +321,6 @@ are the user's to do or explicitly authorize.
 - `references/reddit-pmf.md` — the Phase 5 protocol in full.
 - `references/scouts/` — portable task briefs for delegated research workers.
 - `assets/dossier-template.md` — the report format.
+- `scripts/pain_table.py` — evidence table and suggested T0–T3 grade.
 - `scripts/score.py` — scorer; enforces gates, checks scores against evidence,
   ranks candidates. `scripts/test_score.py` tests it.

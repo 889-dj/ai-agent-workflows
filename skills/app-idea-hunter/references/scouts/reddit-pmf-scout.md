@@ -102,6 +102,11 @@ Bar check: threads <n>/5 | subreddits <n>/2 | recent <yes/no> | asked-for-tool <
 - Current workaround: <what people do instead>
 - Willingness to pay signals: <or "none seen">
 
+### Evidence rows
+Return every thread you read as JSON rows for `scripts/pain_table.py`: url,
+community, date, label (own_problem, paying, hacking, contented, defender, promo,
+scam, noise), asked_for_tool, upvotes, comments, short paraphrase.
+
 ### Queries run
 <list every query, so a kill can be audited>
 ```

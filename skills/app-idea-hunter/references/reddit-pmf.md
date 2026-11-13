@@ -159,6 +159,17 @@ inferred.
 Grade honestly in both directions. A generous grade costs the user weeks of
 building; an ungenerous one costs one more round of searching.
 
+## Record every thread in the evidence table
+
+Do not grade from memory. Label every thread you looked at in a small JSON file
+(`assets/example-pmf-running.json` shows the format) and run
+`python3 scripts/pain_table.py hunt/pmf-<candidate>.json`. Labels: `own_problem`,
+`paying`, `hacking`, `contented`, `defender`, `promo`, `scam`, `noise`. The script
+checks the evidence bar, counts each thread once, reports the on-topic rate and
+the defender weight, and suggests a grade. It only suggests: read the deep-read
+notes and confirm. A low on-topic rate means the query was poor, not that the niche
+is dead.
+
 ## Verifying before you trust
 
 The orchestrator opens at least two of the returned thread links at random per
