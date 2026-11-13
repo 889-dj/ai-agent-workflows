@@ -98,6 +98,18 @@ ratings were observed at time of writing and will drift.
   caps the whole run, not each keyword, so a second keyword can get nothing; raise
   it or run one keyword per call. It returns price, rating and rating count, not
   revenue, so it supports "incumbents exist", never a revenue claim.
+- **Google Trends can show a shared artifact.** Two unrelated terms ("subscription
+  tracker", "running app") returned near-identical curves: flat to mid-2025, a
+  step in Aug 2025, a peak around May 2026, a fall since Oct 2026. When two
+  different terms share a shape, treat it as unreliable (`spiky`) and lean on the
+  steadier years and on related-query signals instead.
+- **Reading comments is cheap.** Passing thread URLs through `startUrls` with
+  `crawlCommentsPerPost` took about 6 seconds for two threads and surfaced the
+  decisive evidence (what people switch to, whether they would pay). Do this for
+  the two or three strongest threads per candidate.
+- **One run per subreddit** with 3–4 short keyword queries gives clean, on-topic
+  rows; running-niche subreddits (`running`, `Strava`, `AdvancedRunning`) each
+  returned 37–62 usable rows in about a minute.
 - A thread that looks like a signal can be a scam or noise. Read the post and a
   few comments before counting it (a "paid for a bad app" thread turned out to be
   a cancellation-page scam).
