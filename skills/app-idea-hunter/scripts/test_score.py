@@ -105,6 +105,13 @@ class ScoreTests(unittest.TestCase):
         self.assertEqual([r["name"] for r in live], ["full", "part"])
         self.assertEqual(live[1]["verdict"], "INCOMPLETE")
 
+    def test_wedge_is_passed_through_and_missing_wedge_warns(self):
+        live, _ = self.rows(cand(wedge="clean run tracker, no upsells"))
+        self.assertEqual(live[0]["wedge"], "clean run tracker, no upsells")
+        self.assertFalse(any("wedge" in w for w in live[0]["warnings"]))
+        live, _ = self.rows(cand())
+        self.assertTrue(any("wedge" in w for w in live[0]["warnings"]))
+
     def test_t3_wins_within_five_points(self):
         t2 = cand(name="t2", scores={"pain": 18, "money": 18, "demand": 15, "marketability": 12, "feasibility": 10})
         t3 = cand(name="t3", pmf_tier="T3", scores={"pain": 25, "money": 18, "demand": 14, "marketability": 8, "feasibility": 6})

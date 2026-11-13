@@ -186,8 +186,11 @@ def build_rows(cands):
             "total": score,
             "missing_axes": missing,
             "warnings": warns + overrides,
+            "wedge": c.get("wedge"),
             "notes": c.get("notes", ""),
         }
+        if not c.get("wedge"):
+            row["warnings"].append("no wedge recorded - score a specific product, not a category (Phase 5.5)")
         if fails:
             row["gates_failed"] = fails
             dead.append(row)
@@ -244,6 +247,8 @@ def main():
                 f"{cell(a['marketability']):>6}{cell(a['feasibility']):>6}"
                 f"{r['total']:>7}  {r['verdict']}"
             )
+            if r.get("wedge"):
+                print(f"   wedge: {r['wedge']}")
             if r["missing_axes"]:
                 print(f"   ^ unscored: {', '.join(r['missing_axes'])} - fill these before trusting the rank")
             for w in r["warnings"]:

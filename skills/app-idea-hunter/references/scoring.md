@@ -84,6 +84,13 @@ Per Phase 6, judged by the main model.
 Simplicity earns points here rather than losing them. The most profitable apps in
 the marketplaces are frequently the least sophisticated.
 
+## Score the wedge, not the category
+
+Axes are scored for the **wedge** defined in Phase 5.5. Money and demand should be
+judged against the incumbents and keywords that wedge would actually compete with,
+and feasibility against the wedge's real build, not a full-featured category leader.
+Record it as `"wedge"` in `scores.json` (a short sentence).
+
 ## Reading the total
 
 - **80+** — build it. Go to Phase 7 and validate this week.
@@ -124,6 +131,7 @@ cannot quietly contradict its own evidence.
   "candidates": [
     {
       "name": "short idea name",
+      "wedge": "one sentence: who it is for and the one complaint it fixes",
       "pmf_tier": "T3",
       "money_evidence": "verified",
       "trend": "rising_both",

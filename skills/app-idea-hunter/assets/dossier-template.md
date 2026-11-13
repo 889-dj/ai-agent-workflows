@@ -33,6 +33,10 @@ Reddit gate, that says something about the domain the user should hear.>
 
 **The app, in one sentence.** <one problem, one feature>
 
+**The wedge.** <the specific person, the one complaint it fixes with its count, what
+it deliberately is not, and why an incumbent will not simply fix it. Fallback
+wedge: <a second cut>>
+
 ### Pain — <n>/25 · PMF <tier>
 <What people actually said, paraphrased. Bar check: threads / subreddits /
 recency / asked-for-tool. Link every thread.>

@@ -242,6 +242,33 @@ thread — and always link the thread so the user can read it themselves.
 Write `hunt/05-reddit-pmf.md`. Record kills together with the searches that were
 run: a null result is a finding, and the user should be able to audit it.
 
+## Phase 5.5 — Define the wedge (score a product, not a category)
+
+A category is not something you can build. "Running apps" scored 63 and only reached
+66 when it was cut to one concrete product. Before scoring, turn the evidence into
+**one wedge**: a specific product for a specific person that fixes the most
+repeated complaint.
+
+Write `hunt/05b-wedge.md` with:
+
+- **The person:** who exactly (for example "recreational runner who pays for Strava
+  and resents the upsells").
+- **The complaint it fixes:** the single most repeated pain from the Reddit table
+  and the review themes, with their counts.
+- **What it is, in one sentence:** one problem, one feature, with a price idea.
+- **What it deliberately is not:** the features you will not build at first.
+- **Why an incumbent will not just fix it:** a structural reason (their business
+  model depends on the upsell, the feature conflicts with their product, they are
+  too large to care about the niche), or an honest "they could".
+- **Fallback wedge:** a second, narrower or different cut if the first fails.
+
+Then run the money, demand and feasibility checks on the **wedge**, not the whole
+category: which incumbents actually compete with it, what keywords it would target,
+what the real build is. Score the wedge. Put its one-line description in
+`scores.json` (`"wedge"`), so the scorecard shows what was scored.
+
+If the evidence supports no wedge, say so; that is a finding, not a failure.
+
 ## Phase 6 — Feasibility, score, report
 
 For each survivor, the main model (not a scout) judges feasibility:
@@ -268,7 +295,8 @@ python3 scripts/score.py hunt/scores.json
 The rubric, weights, and hard kill gates are in `references/scoring.md`. Read it
 before assigning numbers so scores mean the same thing across runs.
 
-Produce `hunt/REPORT.md` using `assets/dossier-template.md`:
+Score the wedge from Phase 5.5, not the category. Produce `hunt/REPORT.md` using
+`assets/dossier-template.md`:
 
 1. **Scorecard** — every candidate, one row, scores per axis, verdict
 2. **Top 3 dossiers** — full evidence per axis, with links
