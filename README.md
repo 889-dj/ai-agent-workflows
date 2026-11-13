@@ -13,7 +13,18 @@ maintained by me for ChatGPT, Codex, Claude, and other AI agents.
 Each skill follows the standard directory format: a required `SKILL.md` entry
 point with optional `references/`, `scripts/`, and `assets/` resources beside it.
 
-## Installation
+## Install as a plugin (Claude Code)
+
+```
+/plugin marketplace add 889-dj/ai-agent-workflows
+/plugin install ai-agent-workflows@ai-agent-workflows
+```
+
+Skills are then available as `/ai-agent-workflows:app-idea-hunter` and
+`/ai-agent-workflows:mobile-ui-pipeline-v2`, and Claude also invokes them
+automatically when a request matches their descriptions.
+
+## Installation (any other agent)
 
 Copy the skill directory into the skills location used by your agent, or point
 your agent at the directory directly:

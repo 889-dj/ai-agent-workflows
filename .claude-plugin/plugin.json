@@ -1,0 +1,10 @@
+{
+  "name": "ai-agent-workflows",
+  "version": "0.1.0",
+  "description": "Reusable agent skills for building products: validate and score app ideas with real market evidence, then design and build working Expo / React Native screens.",
+  "author": { "name": "889-dj", "url": "https://github.com/889-dj" },
+  "homepage": "https://github.com/889-dj/ai-agent-workflows",
+  "repository": "https://github.com/889-dj/ai-agent-workflows",
+  "license": "MIT",
+  "keywords": ["skills", "app-ideas", "validation", "mobile", "react-native", "expo", "ui-design"]
+}

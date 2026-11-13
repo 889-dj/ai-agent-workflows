@@ -1,0 +1,11 @@
+{
+  "name": "ai-agent-workflows",
+  "owner": { "name": "889-dj" },
+  "plugins": [
+    {
+      "name": "ai-agent-workflows",
+      "source": "./",
+      "description": "Idea validation and mobile UI build skills for AI agents."
+    }
+  ]
+}
