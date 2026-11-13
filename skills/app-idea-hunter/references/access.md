@@ -67,6 +67,7 @@ ratings were observed at time of writing and will drift.
 | App reviews, charts (harvest) | `automation-lab/apple-app-store-scraper` (apps, charts, star-filtered reviews: `mode: reviews`, `reviewMaxRating: 3`); `thewolves/appstore-reviews-scraper` | `neatrat/google-play-store-reviews-scraper` for Android (`ratingFilter`, `maxReviews`) | store pages. Feed rows to `scripts/review_themes.py` |
 | Product Hunt (harvest) | `maximedupre/product-hunt-scraper` | `memo23/producthunt-scraper` | producthunt.com leaderboards |
 | Flippa (harvest, money) | `fatihtahta/flippa-search-scraper` | `parseforge/flippa-scraper` | flippa.com listings. Small actors, treat as unproven |
+| Market events (Phase 3) | `apify--web-search`-style search if connected, otherwise the agent's web search; `apify/web-fetch` to read a source page | — | manual search of company blogs, changelogs and news |
 | X support complaints (harvest) | not verified — search the Store before relying on one | — | Agent Reach X, **opt-in only** |
 | Acquire, TrustMRR, Sensor Tower, Astro, Viral Ad Library | not checked — search the Store; login-walled or paid sources often have no actor | — | user-supplied access, else the free proxies in `sources.md` |
 

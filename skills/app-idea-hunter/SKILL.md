@@ -183,7 +183,14 @@ A candidate with rising trends but every keyword above difficulty 70 isn't dead,
 it's a distribution problem — flag it rather than killing it, because Phase 4 may
 find a social channel that routes around ASO entirely.
 
-Write `hunt/03-demand.md`.
+**Market-events scan.** Run `references/scouts/events-scout.md` for each survivor:
+the last 12–18 months of acquisitions, shutdowns, pricing and paywall changes,
+API and platform changes, regulation and funding. Every event needs a date and a
+source. Tag each as opening, threat, blocker or context. Events tagged `blocker`
+go straight into the Phase 6 blocker checklist; `threat` events lower your
+confidence in the money axis; `opening` events go into the wedge.
+
+Write `hunt/03-demand.md` (including the events table).
 
 ## Phase 4 — Marketability
 

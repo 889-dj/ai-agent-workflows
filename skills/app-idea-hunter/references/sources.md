@@ -210,6 +210,9 @@ handles · niche comment sections · LLM ideation
 **Demand** — Google Trends (geo + worldwide) · Astro or proxies (popularity >20,
 difficulty <50)
 
+**Events** — market-events scan for the last 12–18 months (acquisitions, paywall
+and API changes, shutdowns, regulation), every event dated and sourced
+
 **Marketability** — Viral Ad Library (organic vs paid) · TikTok most-liked ·
 controversy read · first-video sentence
 

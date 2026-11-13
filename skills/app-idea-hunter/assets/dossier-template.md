@@ -60,6 +60,12 @@ which tool produced them.>
 
 **First video:** "<the one-sentence hook>"
 
+### What changed recently
+<The events that matter, each with its date and source: acquisitions, paywall or API
+changes, shutdowns, regulation. Tag each opening / threat / blocker.>
+
+| Date | Event | Tag | Source |
+
 ### Feasibility — <n>/10
 <MVP scope, build estimate against budget, real blockers.>
 
