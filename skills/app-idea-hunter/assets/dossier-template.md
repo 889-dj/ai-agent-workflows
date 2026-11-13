@@ -22,8 +22,11 @@ Reddit gate, that says something about the domain the user should hear.>
 
 ## Scorecard
 
-| # | Idea | Pain | Money | Demand | Market | Feas. | Total | Verdict |
-|---|---|---|---|---|---|---|---|---|
+| # | Idea | Pain | Money | Demand | Market | Feas. | Total | Range | Confidence | Verdict |
+|---|---|---|---|---|---|---|---|---|---|---|
+
+<If the verdict is sensitive (the range crosses a band), say which axis to firm up
+and how.>
 
 ---
 

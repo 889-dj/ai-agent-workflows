@@ -290,7 +290,8 @@ For each survivor, the main model (not a scout) judges feasibility:
   assistant absorb the feature, and does the builder have any edge in this domain?
   Put the answer in the dossier under "What would change this verdict".
 
-Then score. Fill `hunt/scores.json` and run:
+Then score. Fill `hunt/scores.json`, including a **confidence** (high, medium, low)
+for each axis, and run:
 
 ```bash
 python3 scripts/score.py hunt/scores.json

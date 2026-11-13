@@ -38,6 +38,10 @@ DEMAND_CAP = {
 # Ceiling on the pain axis implied by the PMF tier.
 PAIN_CAP = {"T0": 0, "T1": 0, "T2": 18, "T3": 25}
 
+# Confidence in each axis score. The uncertainty is a share of the axis maximum:
+# a "low" money score could easily be off by a quarter of the axis.
+CONFIDENCE = {"high": 0.0, "medium": 0.10, "low": 0.25}
+
 
 def fail(msg):
     raise SystemExit(f"error: {msg}")
@@ -99,6 +103,26 @@ def validate(c):
     if build is None or budget is None:
         warns.append("build_days/budget_days missing - budget gate not checked")
 
+    conf = c.get("confidence")
+    if conf is not None:
+        if not isinstance(conf, dict):
+            fail(f"'{name}': confidence must be an object like {{\"money\": \"low\"}}")
+        for axis, level in conf.items():
+            if axis not in MAX:
+                fail(f"'{name}': confidence given for unknown axis '{axis}'")
+            if level not in CONFIDENCE:
+                fail(f"'{name}': confidence for '{axis}' must be one of {sorted(CONFIDENCE)}, got {level!r}")
+        # Evidence quality limits what you may claim.
+        if conf.get("money") == "high" and str(money or "unknown").lower() in {"listed", "unknown", "estimated"}:
+            fail(f"'{name}': money confidence cannot be 'high' with money_evidence '{money}' (need verified figures)")
+        if conf.get("demand") == "high" and trend in {"spiky", "unknown"}:
+            fail(f"'{name}': demand confidence cannot be 'high' when the trend is '{trend}'")
+        if conf.get("pain") == "high" and not tier:
+            fail(f"'{name}': pain confidence cannot be 'high' before Phase 5 has graded the candidate")
+    unrated = [a for a, v in scores.items() if v is not None and not (conf or {}).get(a)]
+    if unrated:
+        warns.append("confidence not recorded for: " + ", ".join(unrated))
+
     return warns
 
 
@@ -153,6 +177,38 @@ def total(c):
     return s, missing
 
 
+def band(score):
+    if score >= 80:
+        return "BUILD"
+    if score >= 65:
+        return "STRONG"
+    if score >= 50:
+        return "PARKING LOT"
+    return "KILL"
+
+
+def confidence_range(c, score):
+    """Return (low, high, label, sensitive) for the total, or None if no confidence given.
+
+    Each scored axis contributes an uncertainty of (share of axis max) by its
+    confidence level; unrated axes are treated as 'medium'. The range is the total
+    plus or minus the summed uncertainty, kept within 0-100."""
+    scores = c.get("scores") or {}
+    conf = c.get("confidence") or {}
+    if not conf:
+        return None
+    unc = 0.0
+    for axis, cap in MAX.items():
+        if scores.get(axis) is None:
+            continue
+        unc += cap * CONFIDENCE[conf.get(axis, "medium")]
+    lo, hi = max(0, round(score - unc)), min(100, round(score + unc))
+    width = hi - lo
+    label = "low" if width >= 30 else "medium" if width >= 15 else "high"
+    sensitive = band(lo) != band(hi)
+    return lo, hi, label, sensitive
+
+
 def verdict(score, missing):
     if missing:
         return "INCOMPLETE"
@@ -191,6 +247,15 @@ def build_rows(cands):
         }
         if not c.get("wedge"):
             row["warnings"].append("no wedge recorded - score a specific product, not a category (Phase 5.5)")
+        rng = confidence_range(c, score)
+        if rng:
+            lo, hi, label, sensitive = rng
+            row["confidence"] = {"range": [lo, hi], "overall": label, "verdict_could_flip": sensitive,
+                                 "by_axis": c.get("confidence")}
+            if sensitive:
+                row["warnings"].append(
+                    f"verdict is sensitive: total could be {lo}-{hi}, spanning {band(lo)} to {band(hi)}; "
+                    "raise confidence on the weakest axes before deciding")
         if fails:
             row["gates_failed"] = fails
             dead.append(row)
@@ -249,6 +314,9 @@ def main():
             )
             if r.get("wedge"):
                 print(f"   wedge: {r['wedge']}")
+            if r.get("confidence"):
+                cf = r["confidence"]
+                print(f"   confidence: {cf['overall']} (total could be {cf['range'][0]}-{cf['range'][1]})")
             if r["missing_axes"]:
                 print(f"   ^ unscored: {', '.join(r['missing_axes'])} - fill these before trusting the rank")
             for w in r["warnings"]:

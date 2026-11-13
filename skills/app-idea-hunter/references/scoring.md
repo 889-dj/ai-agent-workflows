@@ -86,6 +86,25 @@ Per Phase 6, judged by the main model.
 Simplicity earns points here rather than losing them. The most profitable apps in
 the marketplaces are frequently the least sophisticated.
 
+## Confidence per axis
+
+Every score gets a confidence: `high`, `medium` or `low`. It answers "how sure am I
+of this number", not "how good is it".
+
+- **high** — verified figures, or evidence read first-hand and cross-checked.
+- **medium** — good evidence with a known gap (for example a thin sample).
+- **low** — proxies, estimates, an unreliable trend, or data you could not reach.
+
+The scorer turns this into a **range**: low-confidence axes can move by a quarter of
+their maximum, medium by a tenth. If the range crosses a verdict band, the scorer
+warns that the verdict is sensitive. That is the cue to go and raise confidence on
+the weakest axis (usually by finding revenue numbers or a second trend signal)
+before deciding.
+
+Limits the script enforces: money confidence cannot be `high` unless the evidence is
+`verified`; demand confidence cannot be `high` when the trend is `spiky` or
+`unknown`; pain confidence cannot be `high` before Phase 5 has graded the candidate.
+
 ## Score the wedge, not the category
 
 Axes are scored for the **wedge** defined in Phase 5.5. Money and demand should be
@@ -127,6 +146,7 @@ cannot quietly contradict its own evidence.
 - `trend` — `rising_both` · `rising_one` · `spiky` · `seasonal` · `flat` ·
   `declining` · `unknown`
 - `hazard`, `giant_category`, `first_video` — true/false
+- `confidence` per axis — `high` · `medium` · `low`
 
 ```json
 {
@@ -148,6 +168,13 @@ cannot quietly contradict its own evidence.
         "demand": 18,
         "marketability": 14,
         "feasibility": 10
+      },
+      "confidence": {
+        "pain": "high",
+        "money": "high",
+        "demand": "medium",
+        "marketability": "medium",
+        "feasibility": "medium"
       },
       "notes": "one line"
     }

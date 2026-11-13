@@ -52,7 +52,7 @@ class ScoreTests(unittest.TestCase):
         live, dead = self.rows(cand(pmf_tier="T3", money_evidence="none",
                                     scores={"pain": 25, "money": 5, "demand": 15, "marketability": 12, "feasibility": 6}))
         self.assertEqual((len(live), len(dead)), (1, 0))
-        self.assertIn("waived", live[0]["warnings"][0])
+        self.assertTrue(any("waived" in w for w in live[0]["warnings"]))
 
     def test_flat_trend_kills_unknown_does_not(self):
         _, dead = self.rows(cand(trend="flat", scores={"pain": 12, "money": 18, "demand": 8, "marketability": 12, "feasibility": 6}))
@@ -111,6 +111,40 @@ class ScoreTests(unittest.TestCase):
         self.assertFalse(any("wedge" in w for w in live[0]["warnings"]))
         live, _ = self.rows(cand())
         self.assertTrue(any("wedge" in w for w in live[0]["warnings"]))
+
+    def test_confidence_range_and_flip_warning(self):
+        conf = {"pain": "high", "money": "low", "demand": "low", "marketability": "medium", "feasibility": "low"}
+        live, _ = self.rows(cand(money_evidence="listed", trend="spiky", confidence=conf,
+                                 scores={"pain": 18, "money": 10, "demand": 7, "marketability": 18, "feasibility": 6}))
+        cf = live[0]["confidence"]
+        self.assertEqual(cf["overall"], "low")
+        self.assertTrue(cf["verdict_could_flip"])
+        self.assertTrue(any("sensitive" in w for w in live[0]["warnings"]))
+
+    def test_all_high_confidence_is_tight(self):
+        conf = {a: "high" for a in ("pain", "money", "demand", "marketability", "feasibility")}
+        live, _ = self.rows(cand(money_evidence="verified", confidence=conf))
+        self.assertEqual(live[0]["confidence"]["range"][0], live[0]["confidence"]["range"][1])
+        self.assertEqual(live[0]["confidence"]["overall"], "high")
+
+    def test_cannot_claim_high_money_confidence_on_proxies(self):
+        with self.assertRaises(SystemExit):
+            self.rows(cand(money_evidence="listed", confidence={"money": "high"}))
+
+    def test_cannot_claim_high_demand_confidence_on_spiky_trend(self):
+        with self.assertRaises(SystemExit):
+            self.rows(cand(trend="spiky", scores={"pain": 12, "money": 18, "demand": 7, "marketability": 12, "feasibility": 6},
+                           confidence={"demand": "high"}))
+
+    def test_bad_confidence_values_rejected(self):
+        with self.assertRaises(SystemExit):
+            self.rows(cand(confidence={"money": "certain"}))
+        with self.assertRaises(SystemExit):
+            self.rows(cand(confidence={"vibes": "low"}))
+
+    def test_missing_confidence_warns(self):
+        live, _ = self.rows(cand())
+        self.assertTrue(any("confidence not recorded" in w for w in live[0]["warnings"]))
 
     def test_t3_wins_within_five_points(self):
         t2 = cand(name="t2", scores={"pain": 18, "money": 18, "demand": 15, "marketability": 12, "feasibility": 10})
