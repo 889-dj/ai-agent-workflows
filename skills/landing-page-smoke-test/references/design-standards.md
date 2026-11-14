@@ -7,10 +7,12 @@ idea, and motion that explains things, not decoration.
 ## The bar (check every item before handoff)
 
 **Look**
-- One accent colour on a near-black or near-white ground. No purple-to-blue
-  gradient, no rainbow, no stock illustrations, no emoji as icons.
+- The look comes from a theme the user chose (`references/themes.md`); never ship
+  the same look for two different ideas. Within any theme: one accent colour, no
+  purple-to-blue gradient, no rainbow, no stock illustrations, no emoji as icons.
 - A distinctive display font plus a mono for numbers. Never Inter, Roboto or Arial
-  alone. Default pair in the template: Bricolage Grotesque + JetBrains Mono.
+  alone. Each theme sets its own pair (e.g. Midnight: Bricolage Grotesque +
+  JetBrains Mono; Paper: Fraunces + Instrument Sans; Calm: DM Serif Display + Figtree).
 - A headline of 6-9 words at 3.5-5.5rem on desktop. One sentence the visitor can
   repeat. The accent colour marks the 2-3 words that carry the promise.
 - A product visual above the fold: a phone or window mock built in HTML/SVG from

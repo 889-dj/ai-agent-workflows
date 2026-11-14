@@ -29,7 +29,23 @@ headline whenever possible - paraphrase real complaints, never invent quotes.
    - **Decision rule**: >= bar -> build; between 50% and 100% of bar -> one
      iteration of headline/audience, rerun once; under 50% -> move to the next
      candidate. Do not rescue a failing idea by moving the goalposts.
-2. **Page copy** (`smoke-test/COPY.md`), in this order:
+2. **Choose the look (ask; never default silently).** Two ideas must not get the
+   same page. Run `python3 scripts/fill_template.py --themes` to see the built-in
+   themes, then ask the user in ONE `AskUserQuestion` call (max 2 questions):
+   - **Look**: offer the four themes by name with one-line vibes (Midnight: dark and
+     technical; Paper: light and editorial; Pop: loud, flat colour, chunky
+     outlines; Calm: soft sage and rounded), put the one that best fits the product
+     category first and mark it "(Recommended)" using the table in
+     `references/themes.md`. "Other" lets them describe a taste, name a reference
+     site, or give an accent colour; build that as a custom theme (see
+     `references/themes.md`).
+   - **Voice** for the copy: calm and confident / bold and punchy / warm and
+     friendly. It changes the headline, subhead and microcopy, not just the colours.
+   Skip the question only if the user already said what they want or told you to
+   just do it; then pick by category, state the choice in one line, and never reuse
+   the theme and accent of another idea the user has already built this session.
+   Record the choice in `smoke-test/PLAN.md`.
+3. **Page copy** (`smoke-test/COPY.md`), in this order, in the voice the user chose:
    - Headline: the outcome for a specific person, no jargon, under ~12 words.
      Offer 3 variants for A/B.
    - Subhead: how, in one sentence.
@@ -41,10 +57,11 @@ headline whenever possible - paraphrase real complaints, never invent quotes.
    - Optional price test (see below).
    - Footer: a line saying it is in development, a privacy note, and an unsubscribe
      promise.
-3. **Page build** (`smoke-test/index.html`): an interactive, premium single-file
+4. **Page build** (`smoke-test/index.html`): an interactive, premium single-file
    page, not a brochure. Read `references/design-standards.md` first; it is the
    quality bar. Write the copy into a JSON file (see `assets/example-values.json`)
-   and fill `assets/page-template.html` with `scripts/fill_template.py`. A visitor
+   and fill `assets/page-template.html` with `scripts/fill_template.py`, setting
+   `"THEME"` to the chosen look. A visitor
    needs a reason to commit, so the template gives them three things to *do*:
    - **A working preview of the core loop** in a phone mock (tap Start and the run
      plays out live). When it finishes, the CTA appears at the moment of delight.
@@ -64,18 +81,18 @@ headline whenever possible - paraphrase real complaints, never invent quotes.
    the words, if the default look does not suit the category. Optionally study
    the design skills listed in the standards file, but never install third-party
    skills without telling the user.
-4. **Price test (optional, only if the user wants it):** after the email field,
+5. **Price test (optional, only if the user wants it):** after the email field,
    show the intended plan and price and a "Notify me when it launches" confirm
    step, or a two-variant split of prices across two URLs. Be explicit on the page
    that nothing is charged. Do not collect payment details for a product that
    does not exist.
-5. **Traffic plan** (`smoke-test/TRAFFIC.md`): specific places, not channels. For
+6. **Traffic plan** (`smoke-test/TRAFFIC.md`): specific places, not channels. For
    each: the exact thread/community, why the post is a genuine answer, and the
    draft post. Follow each community's self-promotion rules; check them and say
    when a rule would forbid the post. Disclose that you built the thing. Draft
    posts for X/LinkedIn/Instagram as well. Never astroturf: no fake accounts, no
    fake upvotes, no pretending to be a user.
-6. **Verify in a browser** (do not skip): screenshot at 1440x900 and 390x844 after
+7. **Verify in a browser** (do not skip): screenshot at 1440x900 and 390x844 after
    the intro, scroll the whole page, and *use* it: play the preview to the end,
    drag the slider (including 0), pick 3 chips and a 4th, submit with a bad
    email and with `?demo`. Confirm no horizontal overflow, no console errors,
@@ -83,7 +100,7 @@ headline whenever possible - paraphrase real complaints, never invent quotes.
    hiding at the form, and that the page still works with the CDN scripts
    blocked and with reduced motion on. Fix anything that looks generic or broken
    before handoff; if no browser is available, say what was not seen.
-7. **Readout template** (`smoke-test/RESULTS.md`): a blank table for visits,
+8. **Readout template** (`smoke-test/RESULTS.md`): a blank table for visits,
    signups, conversion by source and headline, which preview/slider/vote interactions
    visitors used, the vote tally per feature, plus the decision rule copied
    from step 1, ready to fill in.

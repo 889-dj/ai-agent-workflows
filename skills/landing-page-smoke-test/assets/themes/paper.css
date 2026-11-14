@@ -1,0 +1,29 @@
+/*
+@meta name: Paper
+@meta vibe: light, editorial, serif headlines, hairlines, flat, split hero
+@meta best-for: finance, writing, education, B2B, productivity for grown-ups, anything that should feel trustworthy and considered
+@meta color-scheme: light
+@meta bg: #f3f3ef
+@meta fonts: https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,800&family=Instrument+Sans:wght@400;500;700&family=IBM+Plex+Mono:wght@500&display=swap
+*/
+:root{
+  color-scheme:light;
+  --bg:#f3f3ef; --surface:#ffffff; --surface-2:#fbfbf8; --line:rgba(17,17,17,.14); --line-strong:rgba(17,17,17,.4);
+  --text:#121212; --mute:#5b5b56; --accent:#1c3dff; --accent-ink:#ffffff; --danger:#c9341d; --placeholder:#8b8b84;
+  --track:rgba(17,17,17,.12); --ctl-bg:rgba(17,17,17,.03); --ctl-bg-h:rgba(17,17,17,.07);
+  --thumb:#ffffff; --thumb-border:2px solid #121212; --dock-bg:rgba(255,255,255,.92);
+  --display:"Fraunces",Georgia,"Times New Roman",serif; --body:"Instrument Sans",ui-sans-serif,system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace; --btn-font:600 16px "Instrument Sans",system-ui,sans-serif;
+  --h-weight:600; --h-track:-.025em; --h1-lh:1.02;
+  --r-card:10px; --r-field:12px; --r-btn:8px; --r-chip:8px; --r-pill:8px; --r-phone:44px; --r-screen:35px;
+  --card-bg:#ffffff; --card-shadow:0 1px 0 rgba(17,17,17,.05);
+  --glow-o:0; --grain-o:.07; --grain-blend:multiply;
+  --p-frame:linear-gradient(160deg,#2b2b2b,#101010); --p-screen:#fbfbf8; --p-surface:#ffffff; --p-text:#121212; --p-mute:#6a6a64;
+  --p-line:rgba(17,17,17,.12); --p-base:rgba(17,17,17,.2); --p-btn-alt:#121212; --p-ink:#ffffff;
+  --phone-shadow:0 40px 80px -30px rgba(17,17,17,.45),0 0 0 1px rgba(17,17,17,.25); --route-glow:none;
+}
+h1 em,h2 em{font-style:italic;color:var(--accent)}
+.logo{font-weight:600}
+.logo i{box-shadow:none}
+.kicker{letter-spacing:.08em}
+.card h3,.panel .q{font-family:var(--display)}
