@@ -41,19 +41,29 @@ headline whenever possible - paraphrase real complaints, never invent quotes.
    - Optional price test (see below).
    - Footer: a line saying it is in development, a privacy note, and an unsubscribe
      promise.
-3. **Page build** (`smoke-test/index.html`): a premium single-file page, not a
-   bare form. Read `references/design-standards.md` first; it is the quality bar.
-   Write the copy into a JSON file (see `assets/example-values.json`) and fill
-   `assets/page-template.html` with `scripts/fill_template.py`. The template ships
-   a dark editorial design, an animated headline, a product mock built from the
-   core loop, a "what it will never do" strip, three benefit cards, a closing
-   CTA, GSAP + ScrollTrigger + Lenis motion that degrades to a complete static
-   page, and an honest form (it shows "not connected yet" until a real https
-   endpoint is set, never a fake success). Adapt the accent colour, mock content
-   and section copy to the product; if the default look does not suit the
-   category, change the design, not just the words. Optionally study the design
-   skills listed in the standards file, but never install third-party skills
-   without telling the user.
+3. **Page build** (`smoke-test/index.html`): an interactive, premium single-file
+   page, not a brochure. Read `references/design-standards.md` first; it is the
+   quality bar. Write the copy into a JSON file (see `assets/example-values.json`)
+   and fill `assets/page-template.html` with `scripts/fill_template.py`. A visitor
+   needs a reason to commit, so the template gives them three things to *do*:
+   - **A working preview of the core loop** in a phone mock (tap Start and the run
+     plays out live). When it finishes, the CTA appears at the moment of delight.
+     Adapt the mock to the product's real core loop (see `design/MVP.md`).
+   - **A personal-stakes calculator** (here: a "what do you spend a year" slider
+     with a live 3-year total). Replace it with whatever makes the pain
+     personal for this product, using only numbers the visitor supplies or you
+     can source. Never invent a competitor price.
+   - **A vote-for-what-we-build-first picker** (up to 3 chips) that builds a
+     "Your <app>" card next to the email field. Take the chips from the MVP's
+     Defer list. The votes and slider value are posted with the email, so the
+     smoke test also yields demand data.
+   Plus an animated headline, a "what it will never do" strip, benefit cards, a
+   mobile dock CTA, GSAP + ScrollTrigger + Lenis motion that degrades to a
+   complete static page, and an honest form (it shows "not connected yet" until a
+   real https endpoint is set, never a fake success). Change the design, not just
+   the words, if the default look does not suit the category. Optionally study
+   the design skills listed in the standards file, but never install third-party
+   skills without telling the user.
 4. **Price test (optional, only if the user wants it):** after the email field,
    show the intended plan and price and a "Notify me when it launches" confirm
    step, or a two-variant split of prices across two URLs. Be explicit on the page
@@ -66,13 +76,16 @@ headline whenever possible - paraphrase real complaints, never invent quotes.
    posts for X/LinkedIn/Instagram as well. Never astroturf: no fake accounts, no
    fake upvotes, no pretending to be a user.
 6. **Verify in a browser** (do not skip): screenshot at 1440x900 and 390x844 after
-   the intro, scroll the whole page, confirm no horizontal overflow, no console
-   errors, the form visible above the fold on mobile, the success state
-   (`?demo` preview), and that the page is complete with the CDN scripts
+   the intro, scroll the whole page, and *use* it: play the preview to the end,
+   drag the slider (including 0), pick 3 chips and a 4th, submit with a bad
+   email and with `?demo`. Confirm no horizontal overflow, no console errors,
+   the form visible above the fold on mobile, the dock showing mid-page and
+   hiding at the form, and that the page still works with the CDN scripts
    blocked and with reduced motion on. Fix anything that looks generic or broken
    before handoff; if no browser is available, say what was not seen.
 7. **Readout template** (`smoke-test/RESULTS.md`): a blank table for visits,
-   signups, conversion by source and headline, plus the decision rule copied
+   signups, conversion by source and headline, which preview/slider/vote interactions
+   visitors used, the vote tally per feature, plus the decision rule copied
    from step 1, ready to fill in.
 
 ## Rules

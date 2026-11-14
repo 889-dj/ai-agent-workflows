@@ -32,6 +32,18 @@ idea, and motion that explains things, not decoration.
   there is no proof yet, the "what you will never do" strip and a clear promise are
   the proof.
 
+**Reason to click (the page must answer "why should I, now?")**
+- Let the visitor *try* something before asking for anything: a working preview of
+  the core loop beats any screenshot.
+- Make the pain personal with an input they control (a slider, a picker) and
+  show their own result. Use only numbers they type or that you can source.
+- Ask for a small commitment before the email (vote for what gets built first).
+  The email then saves something they have already made.
+- Put the CTA at the peak of delight (end of the preview), on mobile keep a dock
+  CTA one tap away, and say what they get ("a say in what we build first"),
+  not "Submit".
+- Keep every interaction optional: the email form works without touching them.
+
 **Motion (budget: one intro, one scroll reveal, one signature moment)**
 - Intro: headline words rise out of a mask, rest fades up, phone settles in.
 - Scroll: sections rise once (`once: true`), never re-trigger.

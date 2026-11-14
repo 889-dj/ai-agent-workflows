@@ -10,6 +10,9 @@ honest "not connected" message instead of a fake success. Exits 1 if any other t
 """
 import html, json, re, sys
 
+# Tokens the template places inside JavaScript string literals (may also contain simple HTML, e.g. <strong>).
+JS_TOKENS = {"CURRENCY", "SPEND_ZERO_MSG", "SPEND_MSG", "PICKS_LIMIT", "PICKS_DONE"}
+
 def headline_html(text):
     out, accent = [], False
     for part in re.split(r"(\*)", text):
@@ -32,7 +35,13 @@ def main(tpl_path, values_path, out_path):
     v.setdefault("ACCENT", "#C6FF3D")
     v.setdefault("YEAR", "2026")
     for k, val in v.items():
-        s = s.replace("{{%s}}" % k, str(val) if k in ("HEADLINE_HTML",) else html.escape(str(val), quote=False))
+        if k == "HEADLINE_HTML":
+            rep = str(val)                                     # already built from escaped parts
+        elif k in JS_TOKENS:
+            rep = json.dumps(str(val), ensure_ascii=False)[1:-1].replace("</", "<\\/")  # inside a JS string
+        else:
+            rep = html.escape(str(val), quote=True)            # text and attribute safe
+        s = s.replace("{{%s}}" % k, rep)
     left = sorted(set(re.findall(r"\{\{(\w+)\}\}", s)) - {"FORM_ENDPOINT"})
     open(out_path, "w", encoding="utf-8").write(s)
     if left:
