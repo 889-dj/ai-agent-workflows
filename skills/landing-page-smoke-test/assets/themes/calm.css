@@ -1,0 +1,31 @@
+/*
+@meta name: Calm
+@meta vibe: soft sage, rounded, serif headlines, gentle shadows, airy, split hero
+@meta best-for: wellness, health, meditation, sleep, habits, family, parenting, anything gentle and trustworthy
+@meta color-scheme: light
+@meta bg: #e8eee5
+@meta fonts: https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Figtree:wght@400;500;600;700&family=DM+Mono:wght@500&display=swap
+*/
+:root{
+  color-scheme:light;
+  --bg:#e8eee5; --surface:#f7faf5; --surface-2:#f1f6ee; --line:rgba(22,42,31,.13); --line-strong:rgba(22,42,31,.32);
+  --text:#14251b; --mute:#4a5d51; --accent:#2c6a4c; --accent-ink:#ffffff; --danger:#b0443a; --placeholder:#7d8f84;
+  --track:rgba(22,42,31,.14); --ctl-bg:rgba(255,255,255,.55); --ctl-bg-h:rgba(255,255,255,.9); --thumb:#ffffff; --dock-bg:rgba(247,250,245,.9);
+  --display:"DM Serif Display",Georgia,serif; --body:"Figtree",ui-sans-serif,system-ui,sans-serif; --mono:"DM Mono",ui-monospace,monospace;
+  --btn-font:600 16px "Figtree",system-ui,sans-serif;
+  --h-weight:400; --h-track:-.02em; --h1-lh:1.04;
+  --r-card:30px; --r-field:22px; --r-btn:16px; --r-chip:999px; --r-pill:999px; --r-phone:50px; --r-screen:40px;
+  --card-bg:var(--surface); --card-shadow:0 24px 50px -28px rgba(22,42,31,.35);
+  --glow-o:1; --grain-o:.05; --grain-blend:multiply;
+  --p-frame:linear-gradient(160deg,#2f4a3b,#16261d); --p-screen:#f7faf5; --p-surface:#ffffff; --p-text:#14251b; --p-mute:#5b6e62;
+  --p-line:rgba(22,42,31,.1); --p-base:rgba(22,42,31,.22); --p-btn-alt:#14251b; --p-ink:#ffffff;
+  --phone-shadow:0 50px 90px -30px rgba(22,42,31,.55),0 0 0 1px rgba(22,42,31,.2); --route-glow:none;
+}
+.glow{background:
+  radial-gradient(700px 500px at var(--mx,75%) var(--my,8%),rgba(143,190,160,.45),transparent 70%),
+  radial-gradient(800px 600px at 5% 95%,rgba(222,206,160,.35),transparent 70%)}
+h1 em,h2 em{font-style:italic;color:var(--accent)}
+.btn{box-shadow:0 10px 24px -10px color-mix(in srgb,var(--accent) 70%,transparent)}
+.logo{font-weight:400;font-size:24px}
+.logo i{box-shadow:none}
+.card h3,.panel .q{font-family:var(--display);font-weight:400}

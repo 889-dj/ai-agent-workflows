@@ -1,0 +1,10 @@
+/*
+@meta name: Midnight
+@meta vibe: dark, technical, sleek, glowing accent, split hero
+@meta best-for: fitness, dev tools, productivity, AI tools, crypto, anything fast and technical
+@meta color-scheme: dark
+@meta bg: #0a0a0b
+@meta fonts: https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=JetBrains+Mono:wght@500&display=swap
+*/
+/* Midnight is the template's default token set; only the accent is restated here. */
+:root{ --accent:#c6ff3d; --accent-ink:#0a0a0b; }

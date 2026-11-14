@@ -1,0 +1,37 @@
+/*
+Copy this file into the project (e.g. smoke-test/theme.css), rename it, and edit.
+Point the values JSON at it:  "THEME": "smoke-test/theme.css"
+Keep every contrast pair at WCAG AA (4.5:1 for text): --text/--bg, --mute/--bg, --accent-ink/--accent.
+@meta name: Custom
+@meta color-scheme: dark
+@meta bg: #0a0a0b
+@meta fonts: https://fonts.googleapis.com/css2?family=Archivo:wght@500;800&family=DM+Mono:wght@500&display=swap
+
+Notes: color-scheme is dark or light. bg must equal --bg (it sets the browser theme colour).
+fonts is one Google Fonts URL; one display face plus one mono is plenty.
+*/
+:root{
+  color-scheme:dark;
+  /* colour */
+  --bg:#0a0a0b; --surface:#131316; --surface-2:#1a1a1e; --line:rgba(255,255,255,.09); --line-strong:rgba(255,255,255,.2);
+  --text:#f4f4f2; --mute:#9a9aa3; --accent:#c6ff3d; --accent-ink:#0a0a0b; --danger:#ff6b5e; --placeholder:#6d6d76;
+  --track:rgba(255,255,255,.1); --ctl-bg:rgba(255,255,255,.03); --ctl-bg-h:rgba(255,255,255,.08); --thumb:#fff; --dock-bg:rgba(19,19,22,.86);
+  /* type */
+  --display:"Your Display Font",system-ui,sans-serif; --body:var(--display); --mono:"Your Mono",ui-monospace,monospace;
+  --btn-font:700 16px var(--display);
+  --h-weight:800; --h-track:-.035em; --h-case:none; --h1-lh:.98; /* --h1-size:clamp(2.6rem,7vw,5.4rem) */
+  /* shape: 0 = sharp, 999px = pill */
+  --r-card:24px; --r-field:18px; --r-btn:13px; --r-chip:999px; --r-pill:999px; --r-phone:46px; --r-screen:37px;
+  --card-bg:linear-gradient(180deg,var(--surface-2),var(--surface)); --card-border:1px solid var(--line); --card-shadow:none;
+  --btn-border:0; --btn-shadow:none; /* optional: --field-border --field-shadow --chip-border --nav-border */
+  /* atmosphere: --glow-o 0..1 (accent glow), --grain-o 0..0.1 (paper grain) */
+  --glow-o:1; --grain-o:.05; --grain-blend:overlay;
+  /* the phone interior (usually keep dark or very light) */
+  --p-frame:linear-gradient(160deg,#2a2a30,#0f0f12); --p-screen:#0d0d10; --p-surface:#131316; --p-text:#f4f4f2; --p-mute:#9a9aa3;
+  --p-line:rgba(255,255,255,.09); --p-base:rgba(255,255,255,.1); --p-btn-alt:#fff; --p-ink:#0a0a0b;
+  --phone-shadow:0 40px 90px -20px rgba(0,0,0,.8); --route-glow:none;
+}
+/* Optional structural overrides. Example: a stacked, centred hero (see pop.css):
+.hero{grid-template-columns:1fr;text-align:center;justify-items:center;min-height:0}
+.hero .sub,.hero .signup{margin-inline:auto}
+*/

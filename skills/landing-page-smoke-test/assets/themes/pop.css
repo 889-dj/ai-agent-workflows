@@ -1,0 +1,48 @@
+/*
+@meta name: Pop
+@meta vibe: loud, flat colour, chunky outlines, hard shadows, giant centred headline, stacked hero
+@meta best-for: consumer apps, games, social, food, creators, students, anything fun and loud
+@meta color-scheme: light
+@meta bg: #ffd23f
+@meta fonts: https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,500..900&family=DM+Mono:wght@500&display=swap
+*/
+:root{
+  color-scheme:light;
+  --bg:#ffd23f; --surface:#ffffff; --surface-2:#ffffff; --line:#111111; --line-strong:#111111;
+  --text:#111111; --mute:#3d3a2a; --accent:#ff4b2b; --accent-ink:#111111; --danger:#d11a2a; --placeholder:#7a7357;
+  --track:rgba(17,17,17,.2); --ctl-bg:#ffffff; --ctl-bg-h:#fff3c4; --thumb:#ffffff; --thumb-border:3px solid #111111; --dock-bg:#ffffff;
+  --display:"Archivo","Arial Black",system-ui,sans-serif; --body:"Archivo",system-ui,sans-serif; --mono:"DM Mono",ui-monospace,monospace;
+  --btn-font:800 16px "Archivo",system-ui,sans-serif;
+  --h-weight:900; --h-track:-.045em; --h1-size:clamp(3rem,10.5vw,8rem); --h1-lh:.92;
+  --r-card:18px; --r-field:16px; --r-btn:12px; --r-chip:999px; --r-pill:999px; --r-phone:44px; --r-screen:34px;
+  --card-bg:#ffffff; --card-border:3px solid #111111; --card-shadow:6px 6px 0 #111111;
+  --field-border:3px solid #111111; --field-shadow:5px 5px 0 #111111; --chip-border:2.5px solid #111111; --nav-border:2.5px solid #111111;
+  --btn-border:3px solid #111111; --btn-shadow:4px 4px 0 #111111;
+  --glow-o:0; --grain-o:0;
+  --p-frame:#111111; --p-screen:#ffffff; --p-surface:#fff4c2; --p-text:#111111; --p-mute:#4a4630;
+  --p-line:#111111; --p-base:#111111; --p-btn-alt:#111111; --p-ink:#ffd23f;
+  --phone-shadow:10px 10px 0 #111111; --route-glow:none;
+}
+.hero{grid-template-columns:1fr;text-align:center;justify-items:center;min-height:0;padding-top:40px;gap:56px}
+.hero .sub{margin-inline:auto}
+.phone{text-align:left}
+.hero .signup{margin-inline:auto;width:100%}
+h1 em{background:var(--accent);color:#111;padding:0 .12em;border-radius:.14em;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.pill{border:2.5px solid #111;background:#fff;color:#111}
+.pill b{background:var(--accent)}
+.logo i{box-shadow:none;border:2.5px solid #111}
+.kicker{display:inline-block;background:#fff;color:#111;border:2.5px solid #111;padding:4px 12px;border-radius:99px}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 #111;filter:none}
+.btn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 #111}
+.card:hover{transform:translate(-3px,-3px);box-shadow:9px 9px 0 #111}
+.field:focus-within{border-color:#111;box-shadow:5px 5px 0 var(--accent)}
+.never span::after{background:#111;height:3px}
+.bar.a i{background:var(--accent);border:3px solid #111}
+.bar.b i{background:#fff;border:3px solid #111}
+.chip[aria-pressed=true]{background:var(--accent);color:#111}
+.plan li::before{border:2px solid #111;background:#fff;color:#111}
+.plan li.vote::before{background:var(--accent)}
+.dock{border:3px solid #111;box-shadow:5px 5px 0 #111}
+.s-btn{border:2.5px solid #111}
+footer,.final{border-top:3px solid #111}
+@media (max-width:480px){ :root{ --card-shadow:4px 4px 0 #111111; --field-shadow:4px 4px 0 #111111; } }
