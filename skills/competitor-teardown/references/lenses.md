@@ -72,7 +72,13 @@ each if a tool allows. Count recurring themes by distinct reviews, not mentions:
 `app-idea-hunter` is installed, its `scripts/review_themes.py` does this; otherwise
 tally by hand and say so. Return: sample size, store, country, date range, then per
 theme the number of reviews and the share of the sample, whether it is a product gap,
-quality, pricing or platform complaint, and a paraphrased example. Separate the praise
+quality, pricing or platform complaint, and a paraphrased example. Keyword counts over-count (a Premium member complaining about a bug matches "premium"), so
+define each theme with a strict pattern, then **spot-check about 12 random hits for each
+headline theme by eye and report the precision** ("58 flagged, about 80% genuine, so about
+23%"). Mark such shares `estimated`. Large scraper outputs are saved to a file by the
+tooling: process that file with a script instead of retyping rows. Pull the praise themes
+(4 to 5 stars) too when the budget allows; without them you know what users hate but not
+what they love and must not lose. Separate the praise
 themes: they are what you must not lose. Ignore a single bad release's spike unless
 it persists. A failed pull is `unknown`, never "no complaints".
 

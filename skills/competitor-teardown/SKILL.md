@@ -57,6 +57,16 @@ skill directory.
    one competitor per lens call, and review every return yourself. If not, run the
    lenses inline at reduced breadth and say so. Lenses: `positioning`, `onboarding`,
    `paywall`, `pricing`, `reviews`, `traction`, `changes`, `ui`.
+   Two things the first real run taught:
+   - **Hunt for indie rivals with the same wedge.** Before concluding a niche is
+     empty, search for small apps that already promise what you plan to (for example
+     "free running app no ads no subscription"), and record them even if you cannot
+     tear them down yet. Naming searches often surface them too.
+   - **Spend carefully.** If a lens needs a paid scraper, check the actor's per-result
+     price first (`fetch-actor-details` with pricing), estimate the cost, get the
+     user's go-ahead for anything beyond a few cents, keep the pull small, and report
+     what it cost. A restarted session can leave a half-finished run: list the actor's
+     recent runs before re-issuing a call so you do not pay twice.
 3. **Record and check.** Put every finding in `research/teardown.json` (schema in the
    script's docstring), then run
    `python3 scripts/teardown_check.py research/teardown.json --check`. Fix every

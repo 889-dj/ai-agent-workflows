@@ -59,8 +59,12 @@ Take them in this order and do not re-ask what they answer: a `design/MVP.md` or
    It checks domains (RDAP), App Store collisions (iTunes Search) and look-alikes, and
    labels each name conservatively. Read the verdicts: `incomplete-check` means a
    lookup failed and you must retry or flag it; `clear-so-far` only means the
-   automated checks found nothing. If the network is blocked, say so and treat every
-   name as unchecked.
+   automated checks found nothing. If the network is blocked, say so, treat every
+   name as unchecked, and for the finalists run a web search per name ("<name> app",
+   "<name> running app") and record what it found with the source. A search that finds
+   nothing is weak evidence, never proof a name is free; a search that finds an existing
+   app with that name or a close one is a real conflict, so cut or flag the name.
+   Such searches often reveal competitors too (feed them back to the teardown).
 5. **Manual checks for the final 5 to 8** (the script cannot do these; give the user
    the checklist in `references/naming-strategies.md`): trademark search (USPTO,
    EUIPO, WIPO), Google Play, social handles, a web search for "<name> app", and
